@@ -1,0 +1,106 @@
+
+
+/***********************/
+/* Power configuration */
+/***********************/
+
+// Tx power-related information
+MAX_TX_POWER_CONF: {
+	// Designate the rf port affected by the following configurations 
+	// RF_PORT_1, RF_PORT_2, RF_PORT_BOTH(default)
+	RF_PORT: RF_PORT_BOTH,
+	
+	// The max Tx power value.
+	// Resultant covered range in dBm: [-32; 31.75]
+	MAX_OUTPUT_POWER_QDBM: 80,
+	
+
+	// Front-end loss (loss between the chip and the antenna) in quarters of dB. Type: signed integer between -128 and 127
+	// Resultant covered range in dB: [-32; 31.75]
+	FRONT_END_LOSS_CORRECTION_QDB: 0,
+
+	// Backoff vs. Modulation Group vs Channel
+	// CHANNEL_NUMBER : Designate a channel number(an integer) or a range of channel numbers (an array)
+	// CHANNEL_NUMBER : [3, 9] : Channels from 3 to 9
+	//
+	// BACKOFF_VAL is given in quarters of dB. Type : unsigned integer. Covered range in dB: [0; 63.75]
+	// Each value sets a backoff for a group of modulation.
+	// A modulation group designates a subset of modulation :
+	//   *  MOD_GROUP_0 : B_1Mbps, B_2Mbps, B_5.5Mbps, B_11Mbps
+	//   *  MOD_GROUP_1 : G_6Mbps, G_9Mbps, G_12Mbps, N_MCS0,  N_MCS1, 
+	//   *  MOD_GROUP_2 : G_18Mbps, G_24Mbps, N_MCS2, N_MCS3, 
+	//   *  MOD_GROUP_3 : G_36Mbps, G_48Mbps, N_MCS4, N_MCS5
+	//   *  MOD_GROUP_4 : G_54Mbps, N_MCS6
+	//   *  MOD_GROUP_5 : N_MCS7
+	//   BACKOFF_VAL : [MOD_GROUP_0, ..., MOD_GROUP_5]
+	BACKOFF_QDB: [
+		{
+			CHANNEL_NUMBER : [1, 14],
+			BACKOFF_VAL : [0, 0, 0, 0, 0 ,0],
+		}
+	]
+},
+
+
+/********************/
+/* RF configuration */
+/********************/
+
+RF_ANTENNA_SEL_DIV_CONF: {
+	/*
+	 * Antenna selection:
+	 *   - TX1_RX1
+	 *   - TX2_RX2
+	 *   - TX1_RX2
+	 *   - TX2_RX1
+	 *   - TX1&2_RX1&2
+	 */
+	RF_PORTS: TX1_RX1,
+},
+
+/*************************/
+/* Tests and debug modes */
+/*************************/
+
+TEST_FEATURE_CFG_ELT: {
+	// Wi-Fi channel to use. Accepted range is from 1 to 14.
+	TEST_CHANNEL: 11,
+	// TEST_MODE selects the activated test feature: enum = 'rx', 'tx_packet', 'tx_cw'
+	TEST_MODE: tx_packet,
+	// TEST_IND period in ms at which an indication message is sent.
+	//       In the case of rx test, it returns the measurement results (PER)
+	TEST_IND: 1000,
+
+	// CFG_TX_CW: additional configuration for tx_cw mode
+	CFG_TX_CW: {
+		// CW_MODE CW mode: enum 'single' or 'dual'
+		CW_MODE: single,
+		// FREQ1 frequency offset -31 to 31 (in 312.5kHz)
+		FREQ1: 1,
+		// FREQ2 frequency offset -31 to 31 (in 312.5kHz)
+		FREQ2: 2,
+		// MAX_OUTPUT_POWER indicates the max Tx power value in quarters of dBm
+		MAX_OUTPUT_POWER: 68,
+	},
+
+	// CFG_TX_PACKET: additional configuration for tx_packet mode
+	CFG_TX_PACKET: {
+		// FRAME_SIZE_BYTE frame size in byte (without CRC) from 25 to 4091
+		FRAME_SIZE_BYTE: 3000,
+		// IFS_US interframe spacing in us from 0 to 255
+		IFS_US: 0,
+		// HT_PARAM HT format (mixed mode or greenfield), enum: 'MM' or 'GF'
+		HT_PARAM: MM,
+		// RATE rate selection, enum : B_1Mbps, B_2Mbps, B_5_5Mbps,
+		//     B_11Mbps, G_6Mbps, G_9Mbps, G_12Mbps, G_18Mbps,
+		//     G_24Mbps, G_36Mbps, G_48Mbps, G_54Mbps, N_MCS0,
+		//     N_MCS1, N_MCS2, N_MCS3, N_MCS4, N_MCS5, N_MCS6, N_MCS7
+		RATE: N_MCS7,
+		// NB_FRAME number of frames to send before stopping. 0 means
+		// infinite. integer from 0 to 65535.
+		NB_FRAME: 0,
+	},
+
+	// RX: additional configuration for rx mode
+	RX: { },
+},

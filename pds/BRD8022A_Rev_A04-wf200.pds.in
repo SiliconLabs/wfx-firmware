@@ -1,0 +1,324 @@
+/*
+ * This PDS is only there to test pds_compress.py. Do not use it with real
+ * harwdare
+ */
+#include "definitions-1.2.8.in"
+
+{
+    /**********************/
+    /* Pins configuration */
+    /**********************/
+
+    // Information about this PDS version
+    HEADER_ELT: {
+        VERSION_MAJOR: 1,
+        VERSION_MINOR: 3,
+    },
+
+    // Pad configuration of programmable pins
+    PROG_PINS_CFG_ELT: {
+        // For each PROGrammable pin in this section
+        // SLEW_RATE sets the maximum slew rate on the pin. Type: integer value between 0 and 6 (6=max drive strength)
+        // PULL_UP_DOWN allows to add a pull-up or pull-down on the pad. Type: enum = 'none', 'down', 'up'
+        // SLEEP_CFG allows to add a pull-up or pull-down on the pad while in sleep mode. Type: enum = 'tri', 'down', 'up', 'maintain'
+        //          for the case of pads used as gpio it is also possible to maintain the current driven gpio value
+        // PIN_MODE allows to configure the pin in tristate, functionnal mode or gpio. Type: enum = 'tri', 'func', 'gpio'
+        // INTERNAL : mode also has following enums 'debug', 'clock'
+        // GPIO_ID allows to assign a GPIO_ID to a given pin when configured as gpio. Type = char must be an UPPER case letter
+        GPIO_FEM_1: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: A,
+        },
+        GPIO_FEM_2: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: B
+        },
+        GPIO_FEM_3: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: C
+        },
+        GPIO_FEM_4: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: D
+        },
+        GPIO_FEM_5: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: E
+        },
+        GPIO_FEM_6: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: F
+        },
+        GPIO_PDET: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: G
+        },
+        GPIO_PTA_TX_CONF: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: H
+        },
+        GPIO_PTA_RF_ACT: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: I
+        },
+        GPIO_PTA_STATUS: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: J
+        },
+        GPIO_PTA_FREQ: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: K
+        },
+        GPIO_WUP: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: func,
+            GPIO_ID: L
+        },
+        GPIO_WIRQ: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: M
+        },
+        RESERVE2: {
+            SLEW_RATE: 4,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri,
+            PIN_MODE: tri,
+            GPIO_ID: O
+        }
+    },
+
+    // Pad configuration of HIF pins
+    HIF_PINS_CFG_ELT: {
+        // For each HIF pin in this section
+        // SLEW_RATE sets the maximum slew rate on the pin. Type: integer value between 0 and 6
+        // PULL_UP_DOWN allows to add a pull-up or pull-down on the pad. Type: enum = 'none', 'down', 'up'
+        // SLEEP_CFG allows to add a pull-up or pull-down on the pad while in sleep mode. Type: enum = 'tri', 'down', 'up'
+        SDIO_CLK_SPI_CLK: {
+            SLEW_RATE: 6,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri
+        },
+        SDIO_CMD_SPI_MOSI: {
+            SLEW_RATE: 6,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri
+        },
+        SDIO_D0_SPI_MISO: {
+            SLEW_RATE: 6,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri
+        },
+        SDIO_D1_SPI_WIRQ: {
+            SLEW_RATE: 6,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri
+        },
+        SDIO_D2_HIF_SEL: {
+            SLEW_RATE: 6,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri
+        },
+        SDIO_D3_SPI_CSN: {
+            SLEW_RATE: 6,
+            PULL_UP_DOWN: none,
+            SLEEP_CFG: tri
+        }
+    },
+
+    /***********************/
+    /* Clock configuration */
+    /***********************/
+
+    HF_CLK: {
+        // XTAL_CFG allows to fine tune XTAL Oscillator frequency
+        XTAL_CFG: {
+            // CTUNE_FIX allows to set a high value capacitance on both Xi and Xo. Type: interger between 0 and 3 (default =3)
+            CTUNE_FIX: 3,
+            // CTUNE_XI allows to fine tune the capacitor on pin XTAL_I. Type: integer between 0 and 255 (default = 140)
+            CTUNE_XI: 41,
+            // CTUNE_XO similar to CTUNE_XI for XTAL_O pin
+            CTUNE_XO: 41,
+        }
+    },
+
+    /***********************/
+    /* Power configuration */
+    /***********************/
+
+    // Tx power-related information
+    MAX_TX_POWER_CONF: {
+        // Each triplet gives the max Tx power value in OFDM and in CCK/DSSS vs. the channel number
+        // UP_TO_CHANNEL_NUMBER indicates the channel number up to which the max Tx power value is applicable. Type: integer between 1 and 14
+        // OFDM indicates the max Tx power value in quarters of dBm for the OFDM mode. Type: signed integer between -128 and 127
+        // CCK_DSSS indicates the max Tx power value in quarters of dBm for the CCK/DSSS mode. Type: signed integer between -128 and 127
+        // Resultant covered range in dBm: [-32; 31.75]
+        MAX_OUTPUT_POWER_QDBM: [
+            {
+                UP_TO_CHANNEL_NUMBER: 1,
+                OFDM: 68,
+                CCK_DSSS: 64
+            }, {
+                UP_TO_CHANNEL_NUMBER: 10,
+                OFDM: 80,
+                CCK_DSSS: 72
+            }, {
+                UP_TO_CHANNEL_NUMBER: 14,
+                OFDM: 64,
+                CCK_DSSS: 72
+            }
+        ],
+
+        // Front-end loss (loss between the chip and the antenna) in quarters of dB. Type: signed integer between -128 and 127
+        // Resultant covered range in dB: [-32; 31.75]
+        FRONT_END_LOSS_CORRECTION_QDB: 0,
+
+        // Backoff vs. Mod
+        // MOD = ALC index, from 0 to 10
+        // BACKOFF_VAL is given in quarters of dB. Type : unsigned integer. Covered range in dB: [0; 63.75]
+        BACKOFF_QDB: [
+            {
+                MOD: 0,
+                BACKOFF_VAL: 6
+            }, {
+                MOD: 1,
+                BACKOFF_VAL: 0
+            }, {
+                MOD: 2,
+                BACKOFF_VAL: 9
+            }, {
+                MOD: 3,
+                BACKOFF_VAL: 16
+            }, {
+                MOD: 4,
+                BACKOFF_VAL: 10
+            }, {
+                MOD: 5,
+                BACKOFF_VAL: 2
+            }, {
+                MOD: 6,
+                BACKOFF_VAL: 2
+            }, {
+                MOD: 7,
+                BACKOFF_VAL: 0
+            }, {
+                MOD: 8,
+                BACKOFF_VAL: 0
+            }, {
+                MOD: 9,
+                BACKOFF_VAL: 0
+            }, {
+                MOD: 10,
+                BACKOFF_VAL: 4
+            }
+        ]
+    },
+
+    /********************/
+    /* RF configuration */
+    /********************/
+
+    RF_ANTENNA_SEL_DIV_CONF: {
+        /*
+         * Antenna selection:
+         *   - TX1_RX1
+         *   - TX2_RX2
+         *   - TX1_RX2
+         *   - TX2_RX1
+         *   - TX1&2_RX1&2
+         */
+        RF_PORTS: TX1_RX1,
+
+        /*
+         * Diversity control mode:
+         *   - OFF
+         *   - INTERNAL
+         *   - EXTERNAL
+         * For the INTERNAL value, RF_PORTS must be set to TX1&2_RX1&2
+         */
+        DIVERSITY: OFF,
+    },
+
+    /*************************/
+    /* Tests and debug modes */
+    /*************************/
+
+    TEST_FEATURE_CFG_ELT: {
+        // Wi-Fi channel to use. Accepted range is from 1 to 14.
+        TEST_CHANNEL: 11,
+        // TEST_MODE selects the activated test feature: enum = 'rx', 'tx_packet', 'tx_cw'
+        TEST_MODE: tx_packet,
+        // TEST_IND period in ms at which an indication message is sent.
+        //       In the case of rx test, it returns the measurement results (PER)
+        TEST_IND: 1000,
+
+        // CFG_TX_CW: additional configuration for tx_cw mode
+        CFG_TX_CW: {
+            // CW_MODE CW mode: enum 'single' or 'dual'
+            CW_MODE: single,
+            // FREQ1 frequency offset -31 to 31 (in 312.5kHz)
+            FREQ1: 1,
+            // FREQ2 frequency offset -31 to 31 (in 312.5kHz)
+            FREQ2: 2
+        },
+
+        // CFG_TX_PACKET: additional configuration for tx_packet mode
+        CFG_TX_PACKET: {
+            // FRAME_SIZE_BYTE frame size in byte (without CRC) from 25 to 4091
+            FRAME_SIZE_BYTE: 3000,
+            // IFS_US interframe spacing in us from 0 to 255
+            IFS_US: 0,
+            // HT_PARAM HT format (mixed mode or greenfield), enum: 'MM' or 'GF'
+            HT_PARAM: MM,
+            // RATE rate selection, enum : B_1Mbps, B_2Mbps, B_5.5Mbps,
+            //     B_11Mbps, G_6Mbps, G_9Mbps, G_12Mbps, G_18Mbps,
+            //     G_24Mbps, G_36Mbps, G_48Mbps, G_54Mbps, N_MCS0,
+            //     N_MCS1, N_MCS2, N_MCS3, N_MCS4, N_MCS5, N_MCS6, N_MCS7
+            RATE: N_MCS7,
+            // NB_FRAME number of frames to send before stopping. 0 means
+            // infinite. integer from 0 to 65535.
+            NB_FRAME: 0
+        },
+
+        // RX: additional configuration for rx mode
+        RX: { },
+    },
+
+}

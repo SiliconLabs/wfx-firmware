@@ -1,0 +1,345 @@
+#!/usr/bin/env python3
+# vim: set sw=4 expandtab:
+#
+# Created: 2018-06-21 11:05:30+02:00
+# Main authors:
+#     - Jérôme Pouiller <jerome.pouiller@silabs.com>
+#
+
+# Generate a compressed version of PDS from a full PDS.
+#
+# Differences between full PDS and compressed PDS are:
+#     1. Comments are stripped
+#     2. Symbolic names are replaced with their values
+#     3. Hexadecimal and binary numbers are replaced by their decimal values
+#     4. New lines and spaces are stripped
+#
+# In two words, output of this script is more or less same as:
+#     cpp -undef -P | tr -d '\n\t '
+
+
+# Most C Preprocessor directives are not supported:
+#    - #if (however, #ifdef family is supported)
+#    - Multiple lines defines
+#    - Recursive defines
+#    - Support for strings (defines in strings, comment in strings, etc...)
+
+import sys
+import re
+from optparse import OptionParser
+
+class DebugInfo():
+    def __init__(self, path = "", line = 0):
+        self.path = path
+        self.line = line
+
+class AnnotOut():
+    def __init__(self, loc, val):
+        self.loc = DebugInfo(loc.path, loc.line)
+        self.val = val
+
+# Definitions declared by user using #define
+g_defs = { }
+# Result. Use of arrays instead of a string is a trick to avoid declare it global in each function
+g_result = [ ]
+# Value returned by script
+g_ret_value = 0
+
+def pr_info(dbg_info, message):
+    global g_ret_value
+    g_ret_value = 1
+    print("%s:%d:%s" % (dbg_info.path, dbg_info.line, message), file=sys.stderr)
+
+def handle_ifdef_stack(dbg_info, line, stack):
+    if re.match(r'\s*#\s*ifn?def\s+', line, re.I):
+        m = re.match(r'^\s*#\s*if(n?)def\s+([a-zA-Z_]\w*)\s*$', line, re.I)
+        if not m:
+            pr_info(dbg_info, 'error: bad #ifdef directive (%s)'% line)
+        else:
+            if bool(m.group(2) in g_defs) ^ bool(m.group(1) == "n"):
+                stack.append(stack[-1])
+            else:
+                stack.append(False)
+        return ""
+    if re.match(r'\s*#\s*else', line, re.I):
+        m = re.match(r'^\s*#\s*else\s*$', line, re.I)
+        if not m:
+            pr_info(dbg_info, 'error: text after #else directive')
+        else:
+            if len(stack) < 2:
+                pr_info(dbg_info, 'error: unbalanced #else')
+            if stack[-2]:
+                stack[-1] = not stack[-1]
+            elif stack[-1]:
+                pr_info(dbg_info, "internal error")
+        return ""
+    if re.match(r'\s*#\s*endif', line, re.I):
+        m = re.match(r'^\s*#\s*endif\s*$', line, re.I)
+        if not m:
+            pr_info(dbg_info, 'error: text after #endif directive')
+        else:
+            stack.pop()
+            if len(stack) < 1:
+                pr_info(dbg_info, 'error: unbalanced #endif')
+        return ""
+    if not stack[-1]:
+        return ""
+    return line
+
+def handle_define(dbg_info, line):
+    if re.match(r'\s*#\s*define\s+', line, re.I):
+        m = re.match(r'^\s*#\s*define\s+([a-zA-Z_]\w*)(\s+(.*))?$', line, re.I)
+        if not m:
+            pr_info(dbg_info, 'error: bad #define directive')
+        else:
+            if m.group(1) in g_defs:
+                pr_info(dbg_info, 'warning: "%s" redefined' % m.group(1))
+            if m.lastindex > 1:
+                val = m.group(3)
+            else:
+                val = ""
+            if len(val) > 1 and not re.match(r'^-?(0[xb])?[a-fA-F0-9_]+$', val):
+                pr_info(dbg_info, 'warning: dictionary entry "%s" does not contains a valid token: %s' % (m.group(1), val))
+            g_defs[m.group(1)] = val
+            return ""
+    return line
+
+def handle_include(dbg_info, line):
+    if re.match(r'\s*#\s*include\s+', line, re.I):
+        m = re.match(r'^\s*#\s*include\s+"([\w\./-]+)"\s*$', line, re.I)
+        if not m:
+            pr_info(dbg_info, 'error: bad #include directive')
+            exit(g_ret_value)
+        else:
+            with open(m.group(1)) as f_inc:
+                dbg_info_inc = DebugInfo(m.group(1))
+                parse(dbg_info_inc, f_inc)
+        return ""
+    return line
+
+def replace_definitions(dbg_info, line):
+    out = ""
+    ptr = 0
+    for m in re.finditer(r'\w+', line):
+        if not m.group(0) in g_defs:
+            word = m.group(0)
+            if len(word) > 1 and not re.match(r'^-?(0[xb])?[a-fA-F0-9_]+$', word):
+                pr_info(dbg_info, "error: %s was not found in dictionary" % word)
+        else:
+            word = g_defs[m.group(0)]
+            if len(word) > 1 and not re.match(r'^-?(0[xb])?[a-fA-F0-9_]+$', word):
+                pr_info(dbg_info, "error: %s is not a valid token" % word)
+        out += line[ptr:m.start(0)]
+        out += word
+        ptr = m.end(0)
+    out += line[ptr:]
+    return out
+
+def replace_numbers(dbg_info, line):
+    def convert(n, base):
+        return str(int(re.sub(r'_', '', n), base))
+    def convert_hex(m):
+        return convert(m.group(0)[2:], 16)
+    def convert_bin(m):
+        return convert(m.group(0)[2:], 2)
+    def convert_dec(m):
+        return "%X" % int(convert(m.group(0), 10))
+
+    # Convert all numbers in decimal before converting to hexadecimal
+    line = re.sub(r'0x[0-9a-fA-F_]+', convert_hex, line)
+    line = re.sub(r'0b[0-1_]+', convert_bin, line)
+    line = re.sub(r'[0-9_]+', convert_dec, line)
+    return line
+
+def parse(dbg_info, f_in):
+    ifdef_stack = [ True ]
+    multiline_comment = False;
+    for line in f_in:
+        dbg_info.line += 1
+        line = line.strip()
+        if multiline_comment:
+            (line, n) = re.subn(r'.*?\*/', "", line, 1);
+            if n != 0:
+                multiline_comment = False
+            else:
+                line = ""
+        if not multiline_comment:
+            line = re.sub(r'//.*', "", line);
+            line = re.sub(r'/\*.*?\*/', " ", line) # Note the space inside "
+            line, n = re.subn(r'/\*.*', "", line);
+            if n != 0:
+                if n != 1:
+                    pr_info(dbg_info, "internal error")
+                multiline_comment = True
+            line = line.strip()
+            line = handle_ifdef_stack(dbg_info, line, ifdef_stack)
+            line = handle_include(dbg_info, line)
+            line = handle_define(dbg_info, line)
+            line = replace_definitions(dbg_info, line)
+            line = replace_numbers(dbg_info, line)
+        line = re.sub(r'\s', '', line);
+        g_result.append(AnnotOut(dbg_info, line))
+    if multiline_comment:
+        pr_info(dbg_info, "error: unfinished comment")
+    if len(ifdef_stack) > 1:
+        pr_info(dbg_info, "error: unbalanced #ifdef")
+
+def token_iter():
+    for line in g_result:
+        for char in line.val:
+            # FIXME: A to F are valid identifiers, however, we always consider
+            # them as numbers
+            if re.match(r'[-0-9A-F]', char):
+                yield AnnotOut(line.loc, 'd')
+            elif re.match(r'\w', char):
+                yield AnnotOut(line.loc, 'w')
+            else:
+                yield AnnotOut(line.loc, char)
+    yield AnnotOut(g_result[-1].loc, 'E')
+
+def check_syntax():
+    # There are small approximations in this state machine. For example, a:a:a is
+    # accepted.
+    # Symbolic character list:
+    #    'S' Start
+    #    'E' End
+    #    'w' Single letter
+    #    'd' Single digit
+    # Also notice this table allows ',' to be followed by '}', ']' or E. In
+    # final string, it won't be the case, but here, we haven't done this
+    # simplification yet
+    states = {
+        'S': [ '{', '[' ],
+        'w': [ '}', ']', ':', ',' ],
+        'd': [ '}', ']', ',', 'd' ],
+        ':': [ '{', '[', 'w', 'd' ],
+        ',': [ '{', '[', '}', ']', 'w', 'd', 'E' ],
+        '{': [ '{', '[', '}', ']', 'w' ],
+        '[': [ '{', '[', '}', ']', 'w', 'd'],
+        '}': [ ',', ']', '}', 'E' ],
+        ']': [ ',', ']', '}', 'E' ],
+    }
+    brace_stack = [ ];
+    cur_state = 'S';
+
+    for annot_tok in token_iter():
+        tok = annot_tok.val
+        if not tok in states[cur_state]:
+            pr_info(annot_tok.loc, "error: parsing error (state '%s' cannot be followed by '%s')" % (cur_state, tok));
+            return False
+        else:
+           cur_state = tok
+           if tok in [ '{', '[' ]:
+               brace_stack.append(tok)
+           if tok == '}':
+               if brace_stack.pop() != '{':
+                   pr_info(annot_tok.loc, "error: expected '}'");
+                   return False
+           if tok == ']':
+               if brace_stack.pop() != '[':
+                   pr_info(annot_tok.loc, "error: expected ']'");
+                   return False
+           if tok == 'E' and len(brace_stack) > 0:
+               pr_info(annot_tok.loc, "error: unbalanced %s" % brace_stack.pop());
+               return False
+    return True
+
+def check_sizes(pds_str):
+    brace_level = 0
+    num_token = 0
+    num_char = 0
+    num_top_node = 1
+    for c in pds_str:
+        if c in ",:}]":
+            num_token += 1
+        if c == '{' or c == '[':
+            brace_level += 1
+        if c == '}' or c == ']':
+            brace_level -= 1
+            if brace_level == 1:
+                if num_token >= 256:
+                    print("warning: too much tokens in top-node %d (%d nodes)"
+                            % (num_top_node, num_token), file=sys.stderr)
+                    g_ret_value = 1
+                if num_char >= 1499:
+                    print("warning: top-node %d is too large (%d bytes)"
+                            % (num_top_node, num_char), file=sys.stderr)
+                    g_ret_value = 1
+                num_token = 0
+                num_char = 0
+                num_top_node += 1
+    if brace_level != 0:
+        print("error: internal error (please report) %d" % brace_stack, file=sys.stderr)
+
+def formatc(f_out, pds):
+    stack = 0
+    buf = ""
+    f_out.write('/* AUTOMATICALLY GENERATED -- DO NOT EDIT BY HAND */\n')
+    f_out.write('#include <stdlib.h>\n')
+    f_out.write('\n')
+    f_out.write('const char const * PDS_COMPRESS_MSG[] = {\n')
+    for c in pds:
+        buf += c
+        if c == '{' or c == ']':
+            stack += 1
+        if c == '}' or c == ']':
+            stack -= 1
+        if (c == '}' or c == ']') and stack == 1:
+            f_out.write('    "{%s}",\n' % buf[1:])
+            buf = ""
+    f_out.write('    NULL,\n')
+    f_out.write('};\n')
+
+def main(args):
+    global g_ret_value
+    parser = OptionParser(usage="usage: %prog [options] [INPUT [OUTPUT]]",
+            description="Generate a compressed version of PDS from a full PDS")
+    parser.add_option("-f", "--force", action="store_true", dest="force",
+                  help="try to produce (probably broken) output even if errors are detected")
+    parser.add_option("--out", dest="out_format",
+                  help="specify output format. Accepted values: pds (default, compressed PDS), c (C file), json")
+    parser.add_option("-j", action="store_const", const="json", dest="out_format",
+                  help="shortcut for --out=json")
+    parser.add_option("-c", action="store_const", const="c", dest="out_format",
+                  help="shortcut for --out=c")
+    parser.add_option("-p", action="store_const", const="c", dest="out_format",
+                  help="shortcut for --out=pds")
+    (options, args) = parser.parse_args()
+    if not options.out_format:
+        options.out_format = "pds"
+    if len(args) > 0:
+        f_in = open(args[0], "r")
+        dbg_info = DebugInfo(args[0])
+    else:
+        f_in = sys.stdin
+        dbg_info = DebugInfo("stdin")
+    if len(args) > 1:
+        f_out = open(args[1], "w")
+    else:
+        f_out = sys.stdout
+
+    parse(dbg_info, f_in)
+    if g_ret_value and not options.force:
+        return g_ret_value
+    check_syntax()
+    if g_ret_value and not options.force:
+        return g_ret_value
+    str_result = ''.join(x.val for x in g_result)
+    str_result = re.sub(r',\]', ']', str_result)
+    str_result = re.sub(r',}', '}', str_result)
+    check_sizes(str_result)
+    if g_ret_value and not options.force:
+        return g_ret_value
+    if options.out_format == "json":
+        f_out.write(re.sub(r'([-A-Za-z0-9]+)', r'"\1"', str_result))
+    elif options.out_format == "c":
+        formatc(f_out, str_result)
+    elif options.out_format == "pds":
+        f_out.write(str_result)
+    else:
+        print("error: specified output format '%s' is not valid" % options.out_format)
+        g_ret_value = 1
+    return g_ret_value
+
+if __name__ == '__main__':
+    main(sys.argv)

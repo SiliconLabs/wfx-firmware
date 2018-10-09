@@ -1,0 +1,208 @@
+/*
+ * These definitions come from firmware 1.2.8 headers
+ */
+#ifndef DEFINITIONS_1_2_11_IN
+#define DEFINITIONS_1_2_11_IN
+
+/*
+ * Nodes declarations
+ */
+#define HEADER_ELT              a
+#define     VERSION_MAJOR           a
+#define     VERSION_MINOR           b
+#define PROG_PINS_CFG_ELT       b
+#define     GPIO_FEM_1              a
+#define     GPIO_FEM_2              b
+#define     GPIO_FEM_3              c
+#define     GPIO_FEM_4              d
+#define     GPIO_FEM_5              e
+#define     GPIO_FEM_6              f
+#define     GPIO_PDET               g
+#define     GPIO_PTA_TX_CONF        h
+#define     GPIO_PTA_RF_ACT         i
+#define     GPIO_PTA_STATUS         j
+#define     GPIO_PTA_FREQ           k
+#define     GPIO_WUP                l
+#define     GPIO_WIRQ               m
+#define     RESERVE2                n
+#define         SLEW_RATE               a
+#define         PULL_UP_DOWN            b
+#define         SLEEP_CFG               c
+#define         PIN_MODE                d
+#define         GPIO_ID                 e
+#define HIF_PINS_CFG_ELT        c
+#define     SDIO_CLK_SPI_CLK        a
+#define     SDIO_CMD_SPI_MOSI       b
+#define     SDIO_D0_SPI_MISO        c
+#define     SDIO_D1_SPI_WIRQ        d
+#define     SDIO_D2_HIF_SEL         e
+#define     SDIO_D3_SPI_CSN         f
+#define DBG_CFG_ELT             d
+#define     DBG_CFG_DIGITAL_ELT     a
+#define         DIG_DBG_SEL             a
+#define         JTAG_EN                 b
+#define         JTAG_MOD                c
+#define         UART_EN                 d
+#define     DBG_CFG_ANALOG_ELT      b
+#define         FEM_1_AMUX              a
+#define         FEM_2_AMUX              b
+#define         FEM_3_AMUX              c
+#define         FEM_4_AMUX              d
+#define         FEM_PDET_AMUX           e
+#define         THERM_EN                f
+#define HF_CLK                  e
+#define     XTAL_CFG                a
+#define         CTUNE_FIX             a
+#define         CTUNE_XI              b
+#define         CTUNE_XO              c
+#define FEM_CTRL_PINS_MATRIX    f
+#define     NO_PTA                  a
+#define     COEX_EXCLUSIVE          b
+#define     WLAN_EXCLUSIVE          c
+#define     COEX_WL_COMBINED        d
+#define FEM_TIMINGS             g
+#define     TX_EN_DELAY             a
+#define     TX_DIS_DELAY            b
+#define     PA_EN_DELAY             c
+#define     PA_DIS_DELAY            d
+#define     RX_EN_DELAY             e
+#define     RX_DIS_DELAY            f
+#define MAX_TX_POWER_CONF       h
+#define     MAX_OUTPUT_POWER_QDBM   a
+#define         UP_TO_CHANNEL_NUMBER    a
+#define         OFDM                    b
+#define         CCK_DSSS                c
+#define     FRONT_END_LOSS_CORRECTION_QDB b
+#define     BACKOFF_QDB             c
+#define         MOD                     a
+#define         BACKOFF_VAL             b
+#define TEST_FEATURE_CFG_ELT    i
+#define     TEST_CHANNEL            a
+#define     TEST_MODE               b
+#define     CFG_TX_CW               c
+#define         CW_MODE                 a
+#define         FREQ1                   b
+#define         FREQ2                   c
+#define     CFG_TX_PACKET           d
+#define         FRAME_SIZE_BYTE         a
+#define         IFS_US                  b
+#define         HT_PARAM                c
+#define         RATE                    d
+#define         NB_FRAME                e
+#define     RX                      e
+#define     TEST_IND                f
+#define RF_ANTENNA_SEL_DIV_CONF j
+#define     RF_PORTS                a
+#define     DIVERSITY               b
+#define     EXT_SWITCH_CONTROL      c
+#define         NB_ANTENNA              a
+#define         NB_GPIO                 b
+#define         GPIO_ID_1               c
+#define         GPIO_ID_2               d
+#define         GPIO_ID_3               e
+#define PTA_CFG_ELT             k
+#define     PTA_MODE                a
+#define     SETTINGS                b
+#define     PIN_INVERT              c
+#define     TX_CONF_TIMING          d
+#define     STATUS_TIMING           e
+#define     PRIORITY                f
+
+/*
+ * Attribute values
+ */
+#define disabled 0
+#define enabled  1
+#define no       0
+#define yes      1
+#define off      0
+#define on       1
+// PROG_PINS_CFG_ELT.*.PULL_UP_DOWN:
+#define none     0
+#define down     1
+#define up       3
+#define maintain 4
+// PROG_PINS_CFG_ELT.*.SLEEP_CFG:
+//#define tri      0
+//#define down     1
+//#define up       2
+// PROG_PINS_CFG_ELT.*.MODE:
+#define tri      0
+#define func     1
+#define gpio     2
+// PROG_PINS_CFG_ELT.*.INTERNAL:
+#define debug    3
+#define clock    7
+// TEST_CONF_MSG.TEST_FEATURE_CFG_ELT.CFG_TX_CW.CW_MODE:
+#define single    0
+#define dual      1
+// TEST_CONF_MSG.TEST_FEATURE_CFG_ELT.CFG_TX_PACKET.HT_PARAM:
+#define MM        0
+#define GF        1
+// TEST_CONF_MSG.TEST_FEATURE_CFG_ELT.TEST_MODE:
+#define tx_cw     0
+#define tx_packet 1
+#define rx        2
+// TEST_CONF_MSG.TEST_FEATURE_CFG_ELT.CFG_TX_PACKET.RATE:
+#define B_1Mbps    0
+#define B_2Mbps    1
+#define B_5_5Mbps  2
+#define B_11Mbps   3
+#define G_6Mbps    6
+#define G_9Mbps    7
+#define G_12Mbps   8
+#define G_18Mbps   9
+#define G_24Mbps  10
+#define G_36Mbps  11
+#define G_48Mbps  12
+#define G_54Mbps  13
+#define N_MCS0    14
+#define N_MCS1    15
+#define N_MCS2    16
+#define N_MCS3    17
+#define N_MCS4    18
+#define N_MCS5    19
+#define N_MCS6    20
+#define N_MCS7    21
+// MAX_TX_POWER_CONF.BACKOFF_QDB:
+#define DSSS       0
+#define CCK        1
+#define BPSK_1_2   2
+#define BPSK_3_4   3
+#define QPSK_1_2   4
+#define QPSK_3_4   5
+#define 16QAM_1_2  6
+#define 16QAM_3_4  7
+#define 64QAM_1_2  8
+#define 64QAM_3_4  9
+#define 64QAM_5_6 10
+// RF_ANTENNA_SEL_DIV_CONF.RF_PORTS:
+#define TX1_RX1   0
+#define TX2_RX2   1
+#define TX2_RX1   2
+#define TX1_RX2   3
+#define TX12_RX12 4
+// DRF_ANTENNA_SEL_DIV_CONF.DIVERSITY:
+#define OFF      0
+#define INTERNAL 1
+#define EXTERNAL 2
+// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.DIG_DBG_SEL:
+#define no_debug  0
+#define debug_mux 1
+#define rx_iq_out 2
+#define tx_iq_out 3
+#define rx_iq_in  4
+#define tx_iq_in  5
+// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.JTAG_EN
+// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.UART_EN
+// DBG_CFG_ELT.DBG_CFG_ANALOG_ELT.*
+// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.JTAG_MOD:
+#define daisy_chained 0
+#define ARM9_only     2
+#define ARM0_only     3
+// DBG_CFG_ELT.DBG_CFG_ANALOG_ELT.FEM_X_AMUX_Y:
+// #define disabled 0
+#define diag0  1
+#define diag1  2
+
+#endif

@@ -2,7 +2,7 @@
  * This PDS is only there to test pds_compress.py. Do not use it with real
  * harwdare
  */
-#include "definitions-1.2.8.in"
+#include "definitions-1.2.11.in"
 
 {
     /**********************/

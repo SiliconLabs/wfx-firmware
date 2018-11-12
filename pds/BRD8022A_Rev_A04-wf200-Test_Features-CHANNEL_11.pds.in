@@ -1,0 +1,2 @@
+#define TEST_FEATURE_TEST_CHANNEL 11
+#include "BRD8022A_Rev_A04-wf200-Test_Features.pds.in"

@@ -1,8 +1,8 @@
 /*
- * These definitions come from firmware 1.2.8 headers
+ * These definitions come from firmware 1.2.12 headers
  */
-#ifndef DEFINITIONS_1_2_11_IN
-#define DEFINITIONS_1_2_11_IN
+#ifndef DEFINITIONS_1_2_12_IN
+#define DEFINITIONS_1_2_12_IN
 
 /*
  * Nodes declarations
@@ -55,6 +55,8 @@
 #define         CTUNE_FIX             a
 #define         CTUNE_XI              b
 #define         CTUNE_XO              c
+#define     XTAL_SHARED             b
+#define     XTAL_TEMP_COMP          c
 #define FEM_CTRL_PINS_MATRIX    f
 #define     NO_PTA                  a
 #define     COEX_EXCLUSIVE          b
@@ -68,14 +70,16 @@
 #define     RX_EN_DELAY             e
 #define     RX_DIS_DELAY            f
 #define MAX_TX_POWER_CONF       h
+#define     RF_PORT                 e
 #define     MAX_OUTPUT_POWER_QDBM   a
 #define         UP_TO_CHANNEL_NUMBER    a
 #define         OFDM                    b
 #define         CCK_DSSS                c
 #define     FRONT_END_LOSS_CORRECTION_QDB b
-#define     BACKOFF_QDB             c
+#define     VSWR_BACKOFF_QDB             c
 #define         MOD                     a
 #define         BACKOFF_VAL             b
+#define     TX_POWER_TEMP_COMP      d
 #define TEST_FEATURE_CFG_ELT    i
 #define     TEST_CHANNEL            a
 #define     TEST_MODE               b
@@ -83,6 +87,7 @@
 #define         CW_MODE                 a
 #define         FREQ1                   b
 #define         FREQ2                   c
+#define         MAX_OUTPUT_POWER        d
 #define     CFG_TX_PACKET           d
 #define         FRAME_SIZE_BYTE         a
 #define         IFS_US                  b
@@ -110,48 +115,79 @@
 
 /*
  * Attribute values
+ * These value should more or less follow output of
+ *   sed -ne "s/[\t ]*PDS_\([A-Z0-9_]*\)[\t ]*=[\t ]*'\?\([0-9A-Z_]*\)'\?,\?/#define \1 \2/p" export/pds_parser_defs.h | tr "[A-Z]" "[a-z]"
  */
+
+
+// Generic values
 #define disabled 0
 #define enabled  1
 #define no       0
 #define yes      1
 #define off      0
 #define on       1
-// PROG_PINS_CFG_ELT.*.PULL_UP_DOWN:
-#define none     0
-#define down     1
-#define up       3
-#define maintain 4
-// PROG_PINS_CFG_ELT.*.SLEEP_CFG:
+// PROG_PINS_CFG_ELT.*.PULL_UP_DOWN
+#define none  0
+#define down  1
+#define up    3
+// PROG_PINS_CFG_ELT.*.SLEEP_CFG
 //#define tri      0
 //#define down     1
-//#define up       2
-// PROG_PINS_CFG_ELT.*.MODE:
+//#define up       3
+#define maintain   4
+// PROG_PINS_CFG_ELT.*.MODE
 #define tri      0
 #define func     1
 #define gpio     2
-// PROG_PINS_CFG_ELT.*.INTERNAL:
+// PROG_PINS_CFG_ELT.*.INTERNAL
 #define debug    3
 #define clock    7
-// TEST_CONF_MSG.TEST_FEATURE_CFG_ELT.CFG_TX_CW.CW_MODE:
-#define single    0
-#define dual      1
-// TEST_CONF_MSG.TEST_FEATURE_CFG_ELT.CFG_TX_PACKET.HT_PARAM:
-#define MM        0
-#define GF        1
-// TEST_CONF_MSG.TEST_FEATURE_CFG_ELT.TEST_MODE:
+// MAX_TX_POWER_CONF.RF_PORT
+#define RF_PORT_BOTH 0
+#define RF_PORT_1  1
+#define RF_PORT_2  2
+// MAX_TX_POWER_CONF.VSWR_BACKOFF_QDB.MOD
+#define DSSS 0
+#define CCK 1
+#define BPSK_1_2 2
+#define BPSK_3_4 3
+#define QPSK_1_2 4
+#define QPSK_3_4 5
+#define QAM16_1_2 6
+#define QAM16_3_4 7
+#define QAM64_1_2 8
+#define QAM64_3_4 9
+#define QAM64_5_6 10
+// RF_ANTENNA_SEL_DIV_CONF.RF_PORTS
+#define TX1_RX1   0
+#define TX2_RX2   1
+#define TX2_RX1   2
+#define TX1_RX2   3
+#define TX12_RX12 4
+// DRF_ANTENNA_SEL_DIV_CONF.DIVERSITY
+#define OFF      0
+#define INTERNAL 1
+#define EXTERNAL 2
+// TEST_CONF_MSG.TEST_FEATURE_CFG_ELT.TEST_MODE
 #define tx_cw     0
 #define tx_packet 1
 #define rx        2
-// TEST_CONF_MSG.TEST_FEATURE_CFG_ELT.CFG_TX_PACKET.RATE:
-#define B_1Mbps    0
-#define B_2Mbps    1
-#define B_5_5Mbps  2
-#define B_11Mbps   3
-#define G_6Mbps    6
-#define G_9Mbps    7
-#define G_12Mbps   8
-#define G_18Mbps   9
+// TEST_CONF_MSG.TEST_FEATURE_CFG_ELT.CFG_TX_CW.CW_MODE
+#define single    0
+#define dual      1
+// TEST_CONF_MSG.TEST_FEATURE_CFG_ELT.CFG_TX_PACKET.HT_PARAM
+#define MM        0
+#define GF        1
+// Rate Selection 
+#define B_1Mbps   0
+#define B_2Mbps   1
+#define B_5_5Mbps 2
+#define B_11Mbps  3
+#define G_6Mbps   6
+#define G_9Mbps   7
+#define G_12Mbps  8
+#define G_18Mbps  9
 #define G_24Mbps  10
 #define G_36Mbps  11
 #define G_48Mbps  12
@@ -164,45 +200,19 @@
 #define N_MCS5    19
 #define N_MCS6    20
 #define N_MCS7    21
-// MAX_TX_POWER_CONF.BACKOFF_QDB:
-#define DSSS       0
-#define CCK        1
-#define BPSK_1_2   2
-#define BPSK_3_4   3
-#define QPSK_1_2   4
-#define QPSK_3_4   5
-#define QAM16_1_2  6
-#define QAM16_3_4  7
-#define QAM64_1_2  8
-#define QAM64_3_4  9
-#define QAM64_5_6 10
-// RF_ANTENNA_SEL_DIV_CONF.RF_PORTS:
-#define TX1_RX1   0
-#define TX2_RX2   1
-#define TX2_RX1   2
-#define TX1_RX2   3
-#define TX12_RX12 4
-// DRF_ANTENNA_SEL_DIV_CONF.DIVERSITY:
-#define OFF      0
-#define INTERNAL 1
-#define EXTERNAL 2
-// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.DIG_DBG_SEL:
+// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.DIG_DBG_SEL
 #define no_debug  0
 #define debug_mux 1
 #define rx_iq_out 2
-#define tx_iq_out 3
+#define tx_iq_in  3
 #define rx_iq_in  4
-#define tx_iq_in  5
-// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.JTAG_EN
-// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.UART_EN
-// DBG_CFG_ELT.DBG_CFG_ANALOG_ELT.*
-// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.JTAG_MOD:
+#define tx_iq_out 5
+// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.JTAG_MOD
 #define daisy_chained 0
 #define ARM9_only     2
 #define ARM0_only     3
-// DBG_CFG_ELT.DBG_CFG_ANALOG_ELT.FEM_X_AMUX_Y:
-// #define disabled 0
+// DBG_CFG_ELT.DBG_CFG_ANALOG_ELT.FEM_X_AMUX_Y
+//#define disabled 0
 #define diag0  1
 #define diag1  2
-
 #endif

@@ -26,7 +26,7 @@
 
 import sys
 import re
-from optparse import OptionParser
+import argparse
 
 class DebugInfo():
     def __init__(self, path = "", line = 0):
@@ -40,7 +40,7 @@ class AnnotOut():
 
 # Definitions declared by user using #define
 g_defs = { }
-# Result. Use of arrays instead of a string is a trick to avoid declare it global in each function
+# Result. Use of arrays instead of a string is a trick to avoid declaring it global in each function
 g_result = [ ]
 # Value returned by script
 g_ret_value = 0
@@ -98,6 +98,10 @@ def handle_define(dbg_info, line):
                 val = m.group(3)
             else:
                 val = ""
+            if val in g_defs:
+                val = g_defs[val]
+            val = re.sub(r'^"', '', val)
+            val = re.sub(r'"$', '', val)
             if len(val) > 1 and not re.match(r'^-?(0[xb])?[a-fA-F0-9_]+$', val):
                 pr_info(dbg_info, 'warning: dictionary entry "%s" does not contains a valid token: %s' % (m.group(1), val))
             g_defs[m.group(1)] = val
@@ -120,13 +124,15 @@ def handle_include(dbg_info, line):
 def replace_definitions(dbg_info, line):
     out = ""
     ptr = 0
-    for m in re.finditer(r'\w+', line):
-        if not m.group(0) in g_defs:
-            word = m.group(0)
+    for m in re.finditer(r'["\w]+', line):
+        word = m.group(0)
+        word = re.sub(r'^"', '', word)
+        word = re.sub(r'"$', '', word)
+        if not word in g_defs:
             if len(word) > 1 and not re.match(r'^-?(0[xb])?[a-fA-F0-9_]+$', word):
                 pr_info(dbg_info, "error: %s was not found in dictionary" % word)
         else:
-            word = g_defs[m.group(0)]
+            word = g_defs[word]
             if len(word) > 1 and not re.match(r'^-?(0[xb])?[a-fA-F0-9_]+$', word):
                 pr_info(dbg_info, "error: %s is not a valid token" % word)
         out += line[ptr:m.start(0)]
@@ -150,6 +156,14 @@ def replace_numbers(dbg_info, line):
     line = re.sub(r'0b[0-1_]+', convert_bin, line)
     line = re.sub(r'[0-9_]+', convert_dec, line)
     return line
+
+def fix_outermost_braces(dbg_info):
+    global g_result
+    if not next(token_iter()).val in [ '[', '{' ]:
+        new_token = AnnotOut(DebugInfo(dbg_info.path, 0), '{')
+        g_result.insert(0, new_token)
+        new_token = AnnotOut(DebugInfo(dbg_info.path, dbg_info.line), '}')
+        g_result.append(new_token)
 
 def parse(dbg_info, f_in):
     ifdef_stack = [ True ]
@@ -183,6 +197,9 @@ def parse(dbg_info, f_in):
         pr_info(dbg_info, "error: unfinished comment")
     if len(ifdef_stack) > 1:
         pr_info(dbg_info, "error: unbalanced #ifdef")
+    # Further processes need a non-empty result to retrieve dbg_info
+    if len(g_result) == 0:
+        g_result.append(AnnotOut(dbg_info, ""))
 
 def token_iter():
     for line in g_result:
@@ -220,24 +237,30 @@ def check_syntax():
         ']': [ ',', ']', '}', 'E' ],
     }
     brace_stack = [ ];
-    cur_state = 'S';
+    cur_state = AnnotOut(g_result[-1].loc, 'S');
 
     for annot_tok in token_iter():
         tok = annot_tok.val
-        if not tok in states[cur_state]:
-            pr_info(annot_tok.loc, "error: parsing error (state '%s' cannot be followed by '%s')" % (cur_state, tok));
+        if not tok in states[cur_state.val]:
+            # pr_info(cur_state.loc, "error: parsing error (state '%s' cannot be followed by '%s')" % (cur_state.val, tok));
+            if cur_state.val in [ 'w' ] and tok in [ '{', '[', 'd' ]:
+                pr_info(cur_state.loc, "error: parsing error (missing colon?)")
+            elif cur_state.val in [ 'd', 'w', '}', ']' ] and tok in [ 'd', 'w' ]:
+                pr_info(cur_state.loc, "error: parsing error (missing comma?)")
+            else:
+                pr_info(annot_tok.loc, "error: parsing error")
             return False
         else:
-           cur_state = tok
+           cur_state = annot_tok
            if tok in [ '{', '[' ]:
                brace_stack.append(tok)
            if tok == '}':
                if brace_stack.pop() != '{':
-                   pr_info(annot_tok.loc, "error: expected '}'");
+                   pr_info(annot_tok.loc, "error: unexpected '}'");
                    return False
            if tok == ']':
                if brace_stack.pop() != '[':
-                   pr_info(annot_tok.loc, "error: expected ']'");
+                   pr_info(annot_tok.loc, "error: unexpected ']'");
                    return False
            if tok == 'E' and len(brace_stack) > 0:
                pr_info(annot_tok.loc, "error: unbalanced %s" % brace_stack.pop());
@@ -280,7 +303,7 @@ def formatc(f_out, pds):
     f_out.write('const char const * PDS_COMPRESS_MSG[] = {\n')
     for c in pds:
         buf += c
-        if c == '{' or c == ']':
+        if c == '{' or c == '[':
             stack += 1
         if c == '}' or c == ']':
             stack -= 1
@@ -290,37 +313,65 @@ def formatc(f_out, pds):
     f_out.write('    NULL,\n')
     f_out.write('};\n')
 
+def formattiny(f_out, pds):
+    stack = 0
+    for c in pds:
+        if c == '}' or c == ']':
+            stack -= 1
+            f_out.write("\n" + "    " * stack);
+        f_out.write(c);
+        if c == ':':
+            f_out.write(" ");
+        if c == '{' or c == '[':
+            stack += 1
+            f_out.write("\n" + "    " * stack);
+        if c == ',':
+            f_out.write("\n" + "    " * stack);
+    f_out.write("\n");
+
 def main(args):
     global g_ret_value
-    parser = OptionParser(usage="usage: %prog [options] [INPUT [OUTPUT]]",
+    parser = argparse.ArgumentParser(usage="%(prog)s [options] INPUT [OUTPUT]",
             description="Generate a compressed version of PDS from a full PDS")
-    parser.add_option("-f", "--force", action="store_true", dest="force",
+    parser.add_argument("input", metavar='INPUT',
+                  help="input file (except C format, all output formats can be used as input)")
+    parser.add_argument("output", metavar='OUTPUT', nargs="?",
+                  help="output file (standard output if not specified)")
+    parser.add_argument("-D", "--define", action='append', dest="defines", metavar="DEF[=VAL]",
+                  help="predefine DEF with value VAL")
+    parser.add_argument("-f", "--force", action="store_true", dest="force",
                   help="try to produce (probably broken) output even if errors are detected")
-    parser.add_option("--out", dest="out_format",
-                  help="specify output format. Accepted values: pds (default, compressed PDS), c (C file), json")
-    parser.add_option("-j", action="store_const", const="json", dest="out_format",
+    parser.add_argument("--out", dest="out_format", default="pds", choices=['pds', 'tinypds', 'c', 'json'],
+                  help="specify output format. Accepted values: pds (compressed PDS), tinypds (indented PDS), c (C file), json. Default: pds")
+    parser.add_argument("-j", action="store_const", const="json", dest="out_format",
                   help="shortcut for --out=json")
-    parser.add_option("-c", action="store_const", const="c", dest="out_format",
+    parser.add_argument("-c", action="store_const", const="c", dest="out_format",
                   help="shortcut for --out=c")
-    parser.add_option("-p", action="store_const", const="c", dest="out_format",
+    parser.add_argument("-p", action="store_const", const="pds", dest="out_format",
                   help="shortcut for --out=pds")
-    (options, args) = parser.parse_args()
-    if not options.out_format:
-        options.out_format = "pds"
-    if len(args) > 0:
-        f_in = open(args[0], "r")
-        dbg_info = DebugInfo(args[0])
+    parser.add_argument("-t", action="store_const", const="tinypds", dest="out_format",
+                  help="shortcut for --out=tinypds")
+    options = parser.parse_args()
+    if options.input:
+        f_in = open(options.input, "r")
+        dbg_info = DebugInfo(options.input)
     else:
         f_in = sys.stdin
         dbg_info = DebugInfo("stdin")
-    if len(args) > 1:
-        f_out = open(args[1], "w")
-    else:
-        f_out = sys.stdout
+    for d in options.defines or [ ]:
+        if "=" in d:
+            (var, val) = d.split('=', 1)
+        else:
+            var = d
+            val = ""
+        if var in g_defs:
+            pr_info(DebugInfo("command line"), 'warning: "%s" redefined' % var)
+        g_defs[var] = val
 
     parse(dbg_info, f_in)
     if g_ret_value and not options.force:
         return g_ret_value
+    fix_outermost_braces(dbg_info)
     check_syntax()
     if g_ret_value and not options.force:
         return g_ret_value
@@ -328,18 +379,23 @@ def main(args):
     str_result = re.sub(r',\]', ']', str_result)
     str_result = re.sub(r',}', '}', str_result)
     check_sizes(str_result)
+    if options.output:
+        f_out = open(options.output, "w")
+    else:
+        f_out = sys.stdout
     if g_ret_value and not options.force:
         return g_ret_value
     if options.out_format == "json":
-        f_out.write(re.sub(r'([-A-Za-z0-9]+)', r'"\1"', str_result))
+        formattiny(f_out, re.sub(r'([-A-Za-z0-9]+)', r'"\1"', str_result))
     elif options.out_format == "c":
         formatc(f_out, str_result)
+    elif options.out_format == "tinypds":
+        formattiny(f_out, str_result)
     elif options.out_format == "pds":
         f_out.write(str_result)
     else:
-        print("error: specified output format '%s' is not valid" % options.out_format)
-        g_ret_value = 1
+        raise Exception('bad out_format value')
     return g_ret_value
 
 if __name__ == '__main__':
-    main(sys.argv)
+    exit(main(sys.argv))

@@ -4,7 +4,6 @@
  */
 #include "definitions-1.2.14.in"
 
-{
     /**********************/
     /* Pins configuration */
     /**********************/
@@ -505,4 +504,4 @@
         //          |+ Priority 0:4
         //          +  Priority 1:4
     },
-}
+

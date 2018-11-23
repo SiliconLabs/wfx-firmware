@@ -16,14 +16,13 @@
 
     // Pad configuration of programmable pins
     PROG_PINS_CFG_ELT: {
-        // For each PROGrammable pin in this section
+        // For each PROGrammable PIN in this section
         // SLEW_RATE sets the maximum slew rate on the pin. Type: integer value between 0 and 6 (6=max drive strength)
         // PULL_UP_DOWN allows to add a pull-up or pull-down on the pad. Type: enum = 'none', 'down', 'up'
         // SLEEP_CFG allows to add a pull-up or pull-down on the pad while in sleep mode. Type: enum = 'tri', 'down', 'up', 'maintain'
         //          for the case of pads used as gpio it is also possible to maintain the current driven gpio value
-        // PIN_MODE allows to configure the pin in tristate, functionnal mode or gpio. Type: enum = 'tri', 'func', 'gpio'
-        // INTERNAL : mode also has following enums 'debug', 'clock'
-        // GPIO_ID allows to assign a GPIO_ID to a given pin when configured as gpio. Type = char must be an UPPER case letter
+        // PIN_MODE allows to configure the pin in tristate, functional mode or gpio. Type: enum = 'tri', 'func', 'gpio'
+        // GPIO_ID allows to assign a GPIO_ID to a given pin when configured as gpio. Type = char must be an UPPERCASE letter
         GPIO_FEM_1: {
             SLEW_RATE: 4,
             PULL_UP_DOWN: none,
@@ -126,7 +125,7 @@
 
     // Pad configuration of HIF pins
     HIF_PINS_CFG_ELT: {
-        // For each HIF pin in this section
+        // For each HIF PIN in this section
         // SLEW_RATE sets the maximum slew rate on the pin. Type: integer value between 0 and 6
         // PULL_UP_DOWN allows to add a pull-up or pull-down on the pad. Type: enum = 'none', 'down', 'up'
         // SLEEP_CFG allows to add a pull-up or pull-down on the pad while in sleep mode. Type: enum = 'tri', 'down', 'up'
@@ -169,7 +168,7 @@
     HF_CLK: {
         // XTAL_CFG allows to fine tune XTAL Oscillator frequency
         XTAL_CFG: {
-            // CTUNE_FIX allows to set a high value capacitance on both Xi and Xo. Type: interger between 0 and 3 (default =3)
+            // CTUNE_FIX allows to set a high value capacitance on both Xi and Xo. Type: integer between 0 and 3 (default =3)
             CTUNE_FIX: 3,
             // CTUNE_XI allows to fine tune the capacitor on pin XTAL_I. Type: integer between 0 and 255 (default = 140)
             CTUNE_XI: 41,
@@ -211,12 +210,12 @@
                      0b00_0000, // Reserved
         ],
         COEX_EXCLUSIVE: [
-                     0b00_0000, // Coex has priotiry ( Wlan Inactive )
-                     0b00_0000, // Coex has priotiry ( Wlan Inactive )
-                     0b00_0000, // Coex has priotiry ( Wlan RX )
-                     0b00_0000, // Coex has priotiry ( Wlan tbd )
-                     0b00_0000, // Coex has priotiry ( Wlan TX )
-                     0b00_0000, // Coex has priotiry ( Wlan tbd )
+                     0b00_0000, // Coex has priority ( Wlan Inactive )
+                     0b00_0000, // Coex has priority ( Wlan Inactive )
+                     0b00_0000, // Coex has priority ( Wlan RX )
+                     0b00_0000, // Coex has priority ( Wlan tbd )
+                     0b00_0000, // Coex has priority ( Wlan TX )
+                     0b00_0000, // Coex has priority ( Wlan tbd )
                      0b00_0000, // Reserved
                      0b00_0000, // Reserved
         ],

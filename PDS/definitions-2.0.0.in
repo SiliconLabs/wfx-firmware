@@ -1,8 +1,8 @@
 /*
- * These definitions come from firmware 1.2.12 headers
+ * These definitions come from firmware 2.0.0 headers
  */
-#ifndef DEFINITIONS_1_2_12_IN
-#define DEFINITIONS_1_2_12_IN
+#ifndef DEFINITIONS_2_0_0_IN
+#define DEFINITIONS_2_0_0_IN
 
 /*
  * Nodes declarations
@@ -37,19 +37,6 @@
 #define     SDIO_D1_SPI_WIRQ        d
 #define     SDIO_D2_HIF_SEL         e
 #define     SDIO_D3_SPI_CSN         f
-#define DBG_CFG_ELT             d
-#define     DBG_CFG_DIGITAL_ELT     a
-#define         DIG_DBG_SEL             a
-#define         JTAG_EN                 b
-#define         JTAG_MOD                c
-#define         UART_EN                 d
-#define     DBG_CFG_ANALOG_ELT      b
-#define         FEM_1_AMUX              a
-#define         FEM_2_AMUX              b
-#define         FEM_3_AMUX              c
-#define         FEM_4_AMUX              d
-#define         FEM_PDET_AMUX           e
-#define         THERM_EN                f
 #define HF_CLK                  e
 #define     XTAL_CFG                a
 #define         CTUNE_FIX             a
@@ -72,14 +59,10 @@
 #define MAX_TX_POWER_CONF       h
 #define     RF_PORT                 e
 #define     MAX_OUTPUT_POWER_QDBM   a
-#define         UP_TO_CHANNEL_NUMBER    a
-#define         OFDM                    b
-#define         CCK_DSSS                c
 #define     FRONT_END_LOSS_CORRECTION_QDB b
-#define     VSWR_BACKOFF_QDB             c
-#define         MOD                     a
+#define     BACKOFF_QDB             c
+#define         CHANNEL_NUMBER          a
 #define         BACKOFF_VAL             b
-#define     TX_POWER_TEMP_COMP      d
 #define TEST_FEATURE_CFG_ELT    i
 #define     TEST_CHANNEL            a
 #define     TEST_MODE               b
@@ -140,25 +123,10 @@
 #define tri      0
 #define func     1
 #define gpio     2
-// PROG_PINS_CFG_ELT.*.INTERNAL
-#define debug    3
-#define clock    7
 // MAX_TX_POWER_CONF.RF_PORT
 #define RF_PORT_BOTH 0
 #define RF_PORT_1  1
 #define RF_PORT_2  2
-// MAX_TX_POWER_CONF.VSWR_BACKOFF_QDB.MOD
-#define DSSS 0
-#define CCK 1
-#define BPSK_1_2 2
-#define BPSK_3_4 3
-#define QPSK_1_2 4
-#define QPSK_3_4 5
-#define QAM16_1_2 6
-#define QAM16_3_4 7
-#define QAM64_1_2 8
-#define QAM64_3_4 9
-#define QAM64_5_6 10
 // RF_ANTENNA_SEL_DIV_CONF.RF_PORTS
 #define TX1_RX1   0
 #define TX2_RX2   1
@@ -200,19 +168,4 @@
 #define N_MCS5    19
 #define N_MCS6    20
 #define N_MCS7    21
-// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.DIG_DBG_SEL
-#define no_debug  0
-#define debug_mux 1
-#define rx_iq_out 2
-#define tx_iq_in  3
-#define rx_iq_in  4
-#define tx_iq_out 5
-// DBG_CFG_ELT.DBG_CFG_DIGITAL_ELT.JTAG_MOD
-#define daisy_chained 0
-#define ARM9_only     2
-#define ARM0_only     3
-// DBG_CFG_ELT.DBG_CFG_ANALOG_ELT.FEM_X_AMUX_Y
-//#define disabled 0
-#define diag0  1
-#define diag1  2
 #endif

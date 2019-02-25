@@ -11,8 +11,6 @@ from wfx_test_core import *
 from distutils.version import StrictVersion
 from time import sleep
 
-wf200_fw = ""
-
 
 def channel(ch=None):
     if ch is None:
@@ -26,25 +24,12 @@ def channel(ch=None):
 
 
 def tx_power(dbm=None):
-    if wf200_fw == "2.0.0":
-        if dbm is None:
-            power = int(set_pds_param("MAX_OUTPUT_POWER_QDBM"))
-            return "MAX_OUTPUT_POWER_QDBM" + " " + str(power) + \
-                "  tx_power " + str(int(power/4)) + " dBm"
-        else:
-            set_pds_param("MAX_OUTPUT_POWER_QDBM", int(4*dbm))
-    elif wf200_fw == "1.2.15" or wf200_fw == "1.2.16":
-        if dbm is None:
-            ofdm = int(set_pds_param("OFDM"))
-            cck_dsss = int(set_pds_param("CCK_DSSS"))
-            return \
-                "OFDM " + str(ofdm) + "  " + \
-                "ofdm " + str(int(ofdm/4)) + " dBm" + \
-                "CCK_DSSS " + str(cck_dsss) + "  " + \
-                "cck_dsss " + str(int(cck_dsss/4)) + " dBm"
-        else:
-            set_pds_param("OFDM", int(4*dbm))
-            set_pds_param("CCK_DSSS", int(4*dbm))
+    if dbm is None:
+        power = int(set_pds_param("MAX_OUTPUT_POWER_QDBM"))
+        return "MAX_OUTPUT_POWER_QDBM" + " " + str(power) + \
+            "tx_power " + str(int(power/4)) + " dBm"
+    else:
+        set_pds_param("MAX_OUTPUT_POWER_QDBM", int(4*dbm))
     apply_pds()
 
 
@@ -58,69 +43,34 @@ def tx_backoff(mode_802_11=None, backoff_level=0):
         (backoff_data, nb) = re.subn('\[|\]| ','',backoff_val)
         backoff_max = max(backoff_data.split(','))
         backoff_dbm = str(int(int(backoff_max)/4))
-    if StrictVersion(wf200_fw) >= StrictVersion("2.0.0"):
-        if mode_802_11 is None:
-            return "BACKOFF_VAL " + backoff_max + "  tx_backoff " + \
-            backoff_dbm + " dB"
-        else:
-            if "DSSS" in mode_802_11:
-                index = 0
-            elif "6Mbps" in mode_802_11 or "MCS0" in mode_802_11:
-                index = 1
-            elif "9Mbps" in mode_802_11:
-                index = 1
-            elif "12Mbps" in mode_802_11 or "MCS1" in mode_802_11:
-                index = 1
-            elif "18Mbps" in mode_802_11 or "MCS2" in mode_802_11:
-                index = 2
-            elif "24Mbps" in mode_802_11 or "MCS3" in mode_802_11:
-                index = 2
-            elif "36Mbps" in mode_802_11 or "MCS4" in mode_802_11:
-                index = 3
-            elif "48Mbps" in mode_802_11 or "MCS5" in mode_802_11:
-                index = 3
-            elif "54Mbps" in mode_802_11 or "MCS6" in mode_802_11:
-                index = 4
-            elif "MCS7" in mode_802_11:
-                index = 5
-            else:
-                return "Unknown 802.11 mode"
-            value = [0, 0, 0, 0, 0, 0]
-            value[index] = int(4 * backoff_level)
-            set_pds_param("BACKOFF_VAL", str(value))
-    elif StrictVersion(wf200_fw) >= StrictVersion("1.2.15"):
-        if mode_802_11 is None:
-            return "HT_PARAM    " + set_pds_param("HT_PARAM") + "  " + \
-                   "MOD         " + set_pds_param("MOD") + "  " + \
-                   "BACKOFF_VAL " + backoff_max + "  tx_backoff " + \
-                   backoff_dbm + " dB"
-        else:
-            res = re.findall("([^_]*)_(.*)", mode_802_11)
-            prefix = res[0][0]
-            suffix = res[0][1]
-            print("mode:" + mode_802_11 + " - prefix:" + prefix + 
-                    " - suffix:" + suffix)
-            ht_param = "MM"
-            if "GF_" in mode_802_11:
-                rate = "N_" + suffix
-                ht_param = "GF"
-            elif "MM_" in mode_802_11:
-                rate = "N_" + suffix
-            elif "LEG_" in mode_802_11:
-                rate = "G_" + suffix
-            elif "DSSS_" in mode_802_11:
-                rate = "B_" + suffix + "Mbps"
-            elif "CCK_" in mode_802_11:
-                rate = "B_" + suffix + "Mbps"
-            else:
-                return "Unknown 802.11 mode"
-            print("HT_PARAM:" + ht_param + " - MOD:" + rate + 
-                    " - BACKOFF_VAL:" + backoff_level)
-            set_pds_param("HT_PARAM", ht_param)
-            set_pds_param("MOD", rate)
-            set_pds_param("BACKOFF_VAL", int(4 * backoff_level))
+        return "BACKOFF_VAL " + backoff_max + "  tx_backoff " + \
+        backoff_dbm + " dB"
     else:
-        return "PDS format unknown for " + wf200_fw + "Firmware version"
+        if "DSSS" in mode_802_11:
+            index = 0
+        elif "6Mbps" in mode_802_11 or "MCS0" in mode_802_11:
+            index = 1
+        elif "9Mbps" in mode_802_11:
+            index = 1
+        elif "12Mbps" in mode_802_11 or "MCS1" in mode_802_11:
+            index = 1
+        elif "18Mbps" in mode_802_11 or "MCS2" in mode_802_11:
+            index = 2
+        elif "24Mbps" in mode_802_11 or "MCS3" in mode_802_11:
+            index = 2
+        elif "36Mbps" in mode_802_11 or "MCS4" in mode_802_11:
+            index = 3
+        elif "48Mbps" in mode_802_11 or "MCS5" in mode_802_11:
+            index = 3
+        elif "54Mbps" in mode_802_11 or "MCS6" in mode_802_11:
+            index = 4
+        elif "MCS7" in mode_802_11:
+            index = 5
+        else:
+            return "Unknown 802.11 mode"    
+        value = [0, 0, 0, 0, 0, 0]
+        value[index] = int(4 * backoff_level)
+        set_pds_param("BACKOFF_VAL", str(value))
     apply_pds() 
 
 
@@ -186,15 +136,18 @@ def tx_start(nb_frames=None):
     apply_pds()
 
 
-def tone(cmd, freq=0):
+def tone(cmd=None, freq=0):
     # CW Mode: generate CW @ (freq+1)*312.5Khz
-    if cmd == "start":
-        set_pds_param("CW_MODE", "single")
-        set_pds_param("TEST_MODE", "tx_cw")
-        set_pds_param("FREQ1", freq)
-    elif cmd == "stop":
-        set_pds_param("TEST_MODE", "tx_packet")
-        set_pds_param("NB_FRAME", 100)
+    if cmd is None:
+        return set_pds_param("TEST_MODE")
+    else:
+        if cmd == "start":
+            set_pds_param("CW_MODE", "single")
+            set_pds_param("TEST_MODE", "tx_cw")
+            set_pds_param("FREQ1", freq)
+        elif cmd == "stop":
+            set_pds_param("TEST_MODE", "tx_packet")
+            set_pds_param("NB_FRAME", 100)
     apply_pds()
 
 

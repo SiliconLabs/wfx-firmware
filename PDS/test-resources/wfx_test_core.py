@@ -2,8 +2,8 @@
 
 This module first sets the python environment variables
 The functions in this module provide generic access to 
-	* the PDS file
-	* system calls 
+    * the PDS file
+    * system calls 
 """
 #!/usr/bin/python3
 
@@ -21,6 +21,29 @@ pds_env['SEND_PDS_FILE'] = "/sys/kernel/debug/ieee80211/phy0/wfx/send_pds"
 
 pi_traces = 1
 pds_traces = 1
+
+
+fw_label = ""
+pds_warning = ""
+
+def fw_version(refresh=None):
+    """ Retrieving the FW version from dmesg """
+    global fw_label
+    if refresh is not None:
+        res = pi("wf200 sudo wfx_show | grep 'Firmware loaded version:'")
+        fw_label = res.split(':')[1].strip()
+    return fw_label
+
+
+def check_pds_warning(msg):
+    global pds_warning
+    if pds_warning == "":
+        return msg
+    else:
+        ret = pds_warning
+        pds_warning = ""
+        return ret
+
 
 def set_pds_param(param, value=""):
     """ Setting 'param' to 'value' in temporary PDS file """
@@ -62,9 +85,11 @@ def set_pds_param(param, value=""):
 def apply_pds():
     """ Sending compressed PDS file content to FW """
     global pds_traces
+    global pds_warning
     result_string = pi("wf200 sudo pds_compress " + pds_env['PDS_CURRENT_FILE'] + " 2>&1")
     if ":error:" in result_string:
-        print("WARNING: No pds data sent! " + result_string)
+        pds_warning = "WARNING: No pds data sent! " + result_string
+        print(pds_warning)
     else:
         if pds_traces:
             print("      " + pi("wf200 sudo pds_compress " + pds_env['PDS_CURRENT_FILE']))

@@ -1,4 +1,8 @@
-
+// Information about this PDS version
+HEADER_ELT: {
+    VERSION_MAJOR: 2,
+    VERSION_MINOR: 0,
+},
 
 /***********************/
 /* Power configuration */

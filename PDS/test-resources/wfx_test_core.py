@@ -35,6 +35,11 @@ def fw_version(refresh=None):
     return fw_label
 
 
+def pds_version():
+    """ Retrieving the PDS format version from the temporary file """
+    return set_pds_param("VERSION_MAJOR") + "." + set_pds_param("VERSION_MINOR")
+
+
 def check_pds_warning(msg):
     global pds_warning
     if pds_warning == "":

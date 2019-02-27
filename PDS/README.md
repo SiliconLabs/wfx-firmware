@@ -237,7 +237,7 @@ The `-c` or `--out=c` formats the PDS data as a PDS_COMPRESS_MSG structure. The 
 
 ### TEST_FEATURE.pds.in minimal file for continuous Tx testing
 
-    #include "definitions-2.0.0.in"
+    #include "definitions.in"
 
     /*************************/
     /* Tests and debug modes */

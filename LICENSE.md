@@ -7,6 +7,7 @@ Copyright (c) 2017, Silicon Laboratories, Inc.
 
 -------------------------------------------------------------------------------
 The following software may be included in this product: wpa_supplicant
+
 Use of any of this software is governed by the terms of the license below: 
 
 Copyright (c) 2003-2017, Jouni Malinen <j@w1.fi> and contributors
@@ -45,6 +46,7 @@ BSD license:
 
 -------------------------------------------------------------------------------
 The following software may be included in this product: jsmn
+
 Use of any of this software is governed by the terms of the license below: 
 
     Copyright (c) 2010 Serge A. Zaitsev

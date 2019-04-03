@@ -1,21 +1,22 @@
 Your use of this software is subject to the terms of the Silicon Labs Master Software License Agreement,
  available at https://www.silabs.com/about-us/legal/master-software-license-agreement 
  and at www.silabs.com/about-us/legal.
+
 If you do not agree to the terms of this license, do not use this software.
 
-Copyright (c) 2017, Silicon Laboratories, Inc.
+    Copyright (c) 2017, Silicon Laboratories, Inc.
 
 -------------------------------------------------------------------------------
 The following software may be included in this product: wpa_supplicant
 
 Use of any of this software is governed by the terms of the license below: 
 
-Copyright (c) 2003-2017, Jouni Malinen <j@w1.fi> and contributors
-All Rights Reserved.
-
+    Copyright (c) 2003-2017, Jouni Malinen <j@w1.fi> and contributors
+    All Rights Reserved.
 
 This software may be distributed, used, and modified under the terms of
-BSD license:
+
+    BSD license:
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are

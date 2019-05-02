@@ -1,0 +1,55 @@
+// Legacy definitions for compatibility
+
+
+#ifndef DEFINITIONS_2_2_0_IN
+#define DEFINITIONS_2_2_0_IN
+#define MAX_TX_POWER_CFG       h
+#define GPIO_PTA_TX_CFG        h
+#define TX_CFG_TIMING          d
+#define DFS_min          0
+#define DFS_FCC          1
+#define DFS_ETSI         2
+#define DFS_JP           3
+#define DFS_Unrestricted 4
+#endif // DEFINITIONS_2_2_0_IN
+
+#ifndef DEFINITIONS_2_1_0_IN
+#define DEFINITIONS_2_1_0_IN
+#define HEADER_ELT              a
+#define PROG_PINS_CFG_ELT       b
+#define HIF_PINS_CFG_ELT        c
+#define MAX_TX_POWER_CONF       h
+#define TEST_FEATURE_CFG_ELT    i
+#define TEST_CHANNEL            a
+#define RF_ANTENNA_SEL_DIV_CONF j
+#define PTA_CFG_ELT             k
+	
+// GPIO_PTA_TX_CONF only disappeared in v2.2
+#ifndef GPIO_PTA_TX_CONF
+#define GPIO_PTA_TX_CONF        h
+#endif 
+
+// TX_CONF_TIMING only disappeared in v2.2
+#ifndef TX_CONF_TIMING
+#define TX_CONF_TIMING        d
+#endif 
+#endif // DEFINITIONS_2_1_0_IN
+
+#ifndef DEFINITIONS_2_0_0_IN
+#define DEFINITIONS_2_0_0_IN
+#define UP_TO_CHANNEL_NUMBER    a
+#define OFDM                    b
+#define CCK_DSSS                c
+#define TX_POWER_TEMP_COMP      d
+#define DSSS 0
+#define CCK 1
+#define BPSK_1_2 2
+#define BPSK_3_4 3
+#define QPSK_1_2 4
+#define QPSK_3_4 5
+#define QAM16_1_2 6
+#define QAM16_3_4 7
+#define QAM64_1_2 8
+#define QAM64_3_4 9
+#define QAM64_5_6 10
+#endif // DEFINITIONS_2_0_0_IN

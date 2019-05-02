@@ -1,8 +1,8 @@
 /*
- * These definitions come from firmware 2.2.0 headers
+ * These definitions come from firmware 2.3.0 headers
  */
-#ifndef DEFINITIONS_2_2_0_IN
-#define DEFINITIONS_2_2_0_IN
+#ifndef DEFINITIONS_2_3_0_IN
+#define DEFINITIONS_2_3_0_IN
 
 /*
  * Nodes declarations
@@ -18,7 +18,7 @@
 #define     GPIO_FEM_5              e
 #define     GPIO_FEM_6              f
 #define     GPIO_PDET               g
-#define     GPIO_PTA_TX_CFG        h
+#define     GPIO_PTA_TX_CONF        h
 #define     GPIO_PTA_RF_ACT         i
 #define     GPIO_PTA_STATUS         j
 #define     GPIO_PTA_FREQ           k
@@ -57,13 +57,14 @@
 #define         PA_DIS_DELAY            d
 #define         RX_EN_DELAY             e
 #define         RX_DIS_DELAY            f
-#define MAX_TX_POWER_CFG       h
+#define RF_POWER_CFG       h
 #define     RF_PORT                 e
 #define     MAX_OUTPUT_POWER_QDBM   a
 #define     FRONT_END_LOSS_CORRECTION_QDB b
 #define     BACKOFF_QDB             c
 #define         CHANNEL_NUMBER          a
 #define         BACKOFF_VAL             b
+#define     RSSI_CORRECTION         d
 #define TEST_FEATURE_CFG    i
 #define     TEST_CHANNEL_FREQ       a
 #define     TEST_MODE               b
@@ -94,7 +95,7 @@
 #define     PTA_MODE                a
 #define     SETTINGS                b
 #define     PIN_INVERT              c
-#define     TX_CFG_TIMING          d
+#define     TX_CONF_TIMING          d
 #define     STATUS_TIMING           e
 #define     PRIORITY                f
 
@@ -122,7 +123,7 @@
 #define tri      0
 #define func     1
 #define gpio     2
-// MAX_TX_POWER_CFG.RF_PORT
+// RF_POWER_CFG.RF_PORT
 #define RF_PORT_BOTH 0
 #define RF_PORT_1  1
 #define RF_PORT_2  2
@@ -168,11 +169,11 @@
 #define N_MCS6    20
 #define N_MCS7    21
 // TEST_CFG_MSG.TEST_FEATURE_CFG.CFG_TX_PACKET.REG_MODE
-#define DFS_min          0
-#define DFS_FCC          1
-#define DFS_ETSI         2
-#define DFS_JP           3
-#define DFS_Unrestricted 4
+#define CERTIFIED_All          0
+#define CERTIFIED_FCC          1
+#define CERTIFIED_ETSI         2
+#define CERTIFIED_JAPAN        3
+#define CERTIFIED_Unrestricted 4
 // PTA_CFG.PTA_MODE
 #define EPTA_MODE_NO_BT             0
 #define EPTA_MODE_PTA_1W_WL_MASTER  1
@@ -180,3 +181,5 @@
 #define EPTA_MODE_PTA_2W            3
 #define EPTA_MODE_PTA_3W            4
 #endif
+
+#include "definitions_legacy.in"

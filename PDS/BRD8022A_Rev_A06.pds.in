@@ -2,7 +2,7 @@
  * The PDS is used to enter configuration data.
  *
  * This file is a template that shows all elements that exist.
- * Sections PROG_PINS_CFG, HIF_PINS_CFG_ELT and HF_CLK contain hardware default values.
+ * Sections PROG_PINS_CFG, HIF_PINS_CFG and HF_CLK contain hardware default values.
  * Please do not use it with real hardware: copy it and update it to fit to your own hardware. 
  *
  * It should then be processed by the pds_compress script to generate the compressed
@@ -14,16 +14,15 @@
 #include "definitions.in"
 
 
+// Information about this PDS version
+HEADER: {
+    VERSION_MAJOR: 2,
+    VERSION_MINOR: 3
+},
 
 /**********************/
 /* Pins configuration */
 /**********************/
-
-// Information about this PDS version
-HEADER: {
-    VERSION_MAJOR: 2,
-    VERSION_MINOR: 2,
-},
 
 // Pad configuration of programmable pins
 PROG_PINS_CFG: {
@@ -83,7 +82,7 @@ PROG_PINS_CFG: {
         PIN_MODE: tri,
         GPIO_ID: G
     },
-    GPIO_PTA_TX_CFG: {
+    GPIO_PTA_TX_CONF: {
         SLEW_RATE: 4,
         PULL_UP_DOWN: none,
         SLEEP_CFG: none,
@@ -262,7 +261,7 @@ FEM_CFG: {
 /***********************/
 
 // Tx power-related information
-MAX_TX_POWER_CFG: {
+RF_POWER_CFG: {
     // Designate the rf port affected by the following configurations 
     // RF_PORT_1, RF_PORT_2, RF_PORT_BOTH(default)
     RF_PORT: RF_PORT_BOTH,
@@ -317,32 +316,33 @@ MAX_TX_POWER_CFG: {
             CHANNEL_NUMBER : 14,
             BACKOFF_VAL : [0, 0, 0, 0, 0 ,0]
         }
-    ]
-},
+    ],
 
+    RSSI_CORRECTION: 0
+},
 
 /********************/
 /* RF configuration */
 /********************/
 
 RF_ANTENNA_SEL_DIV_CFG: {
-    /*
-     * Antenna selection:
-     *   - TX1_RX1
-     *   - TX2_RX2
-     *   - TX1_RX2
-     *   - TX2_RX1
-     *   - TX12_RX12
-     */
+    //
+    // Antenna selection:
+    //   - TX1_RX1
+    //   - TX2_RX2
+    //   - TX1_RX2
+    //   - TX2_RX1
+    //   - TX12_RX12
+    //
     RF_PORTS: TX1_RX1,
 
-    /*
-     * Diversity control mode:
-     *   - OFF
-     *   - INTERNAL
-     *   - EXTERNAL
-     * For the INTERNAL value, RF_PORTS must be set to TX12_RX12
-     */
+    //
+    // Diversity control mode:
+    //   - OFF
+    //   - INTERNAL
+    //   - EXTERNAL
+    // For the INTERNAL value, RF_PORTS must be set to TX12_RX12
+    //
     DIVERSITY: OFF,
 
     // External switch control antenna
@@ -358,7 +358,7 @@ RF_ANTENNA_SEL_DIV_CFG: {
         GPIO_ID_1: [A, 1, 0, 0],
         GPIO_ID_2: [B, 0, 1, 0],
         GPIO_ID_3: [C, 0, 0, 1]
-    },
+    }
     */
 },
 
@@ -367,11 +367,9 @@ RF_ANTENNA_SEL_DIV_CFG: {
 /*********************/
 /*
 PTA_CFG: {
-    // PTA Mode selection
-    // 0 : No PTA
-    // 1 : 2-Wire
-    // 2 : 3-Wire
-    PTA_MODE: 0,
+    // PTA Mode selection, enum: EPTA_MODE_NO_BT, EPTA_MODE_PTA_1W_WL_MASTER, EPTA_MODE_PTA_1W_BT_MASTER,
+	// EPTA_MODE_PTA_2W, EPTA_MODE_PTA_3W
+    PTA_MODE: EPTA_MODE_NO_BT,
 
     // PTA settings :
     // setting the EnOverrideBt bit to 1 indicate the BT grant could be broken if WLAN won the arbitration
@@ -397,13 +395,13 @@ PTA_CFG: {
     //             |||| |||+ invert PTA_RF_ACT  (input)
     //             |||| ||+  invert PTA_STATUS  (input)
     //             |||| |+   invert PTA_FREQ    (input)
-    //             |||| +    invert PTA_TX_CFG (input)
+    //             |||| +    invert PTA_TX_CONF (input)
     //             |||+      invert PTA_FREQ    (output)
-    //             ||+       invert PTA_TX_CFG (output)
+    //             ||+       invert PTA_TX_CONF (output)
     //             ++        Reserved:2
 
-    // TX conf valid time it the time in us from BT_RF_ACTIVE to TX_CFG assertion
-    TX_CFG_TIMING: 0x48,
+    // TX conf valid time it the time in us from BT_RF_ACTIVE to TX_CONF assertion
+    TX_CONF_TIMING: 0x48,
     //                ++ TXConfValideTime:7
     //                +  Reserved:1
 
@@ -414,7 +412,7 @@ PTA_CFG: {
     //               ++   TxRxSamplingTime:8
 
     // priority matrix given for BT
-    PRIORITY: 0x61,
+    PRIORITY: 0x61
     //          |+ Priority 0:4
     //          +  Priority 1:4
 

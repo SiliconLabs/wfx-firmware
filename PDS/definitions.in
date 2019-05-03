@@ -181,5 +181,3 @@
 #define EPTA_MODE_PTA_2W            3
 #define EPTA_MODE_PTA_3W            4
 #endif
-
-#include "definitions_legacy.in"

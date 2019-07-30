@@ -1,8 +1,8 @@
 /*
- * These definitions come from firmware 2.2.3 headers
+ * These definitions come from firmware 3.0.0 headers
  */
-#ifndef DEFINITIONS_2_4_0_IN
-#define DEFINITIONS_2_4_0_IN
+#ifndef DEFINITIONS_3_0_0_IN
+#define DEFINITIONS_3_0_0_IN
 
 /*
  * Nodes declarations
@@ -91,21 +91,6 @@
 #define         GPIO_ID_1               c
 #define         GPIO_ID_2               d
 #define         GPIO_ID_3               e
-#define PTA_CFG             k
-#define     PTA_MODE                a
-#define     GRANT_VALID_TIME        d
-#define     PTA_REQUEST             g
-#define     PTA_PRIORITY            h
-#define     PTA_FREQ                i
-#define     PTA_GRANT               j
-#define     PRIORITY_SAMPLING_TIME  k
-#define     PROTECT_WLAN_RX         n
-#define     PROTECT_WLAN_TX         o
-#define     PROTECT_COEX            p
-#define     GRANT_WLAN              q
-#define     GRANT_COEX              r
-#define     NO_COMBINE              s
-#define     DEFAULT_GRANT_STATE     t
 
 /*
  * Attribute values
@@ -121,10 +106,6 @@
 #define yes      1
 #define off      0
 #define on       1
-#define OFF      0
-#define ON       1
-#define LOW      0
-#define HIGH     1
 // PROG_PINS_CFG.*.PULL_UP_DOWN
 // PROG_PINS_CFG.*.SLEEP_CFG
 #define none  0
@@ -146,6 +127,7 @@
 #define TX1_RX2   3
 #define TX12_RX12 4
 // DRF_ANTENNA_SEL_DIV_CFG.DIVERSITY
+#define OFF      0
 #define INTERNAL 1
 #define EXTERNAL 2
 // TEST_CFG_MSG.TEST_FEATURE_CFG.TEST_MODE
@@ -185,14 +167,4 @@
 #define CERTIFIED_ETSI         2
 #define CERTIFIED_JAPAN        3
 #define CERTIFIED_Unrestricted 4
-// PTA_CFG.PTA_MODE
-#define PTA_NONE               0
-#define PTA_1W_WLAN_MASTER     1
-#define PTA_1W_COEX_MASTER     2
-#define PTA_2W                 3
-#define PTA_3W                 4
-// PTA_CFG.DEFAULT_GRANT_STATE
-#define NOGRANT                0
-#define GRANT                  1
 #endif
-

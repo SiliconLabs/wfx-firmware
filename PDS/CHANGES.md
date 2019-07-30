@@ -1,6 +1,22 @@
 Platform Data Set (PDS) release note
 ====================================
 
+# Version 3.0
+## FW compatibility
+* PDS version 3.0 is required for FW 3.0.0
+
+## New Features/Improvements
+* Removed PTA section
+
+
+# Version 2.4
+## FW compatibility
+* PDS version 2.4 is required for FW 2.2.3
+
+## New Features/Improvements
+* PTA updates
+
+
 # Version 2.3
 ## FW compatibility
 * PDS version 2.3 is required for FW 2.2.2
@@ -8,7 +24,7 @@ Platform Data Set (PDS) release note
 ## New Features/Improvements
 * MAX_TX_POWER_CFG section renamed to RF_POWER_CFG
 * RSSI_CORRECTION field is added in RF_POWER_CFG section to take into account the loss on the RF path in RSSI estimation.
-* REG_MODE (Regulatory modes) enumerates have been renamed for better clarity (TEST_FEATURE_CFG section)  
+* REG_MODE (Regulatory modes) enumerates have been renamed for better clarity (TEST_FEATURE_CFG section)
 
 ## Bug fixes
 * correction of a mistake in Version 2.2 where all PTA_TX_CONF were renamed to PTA_TX_CFG. The new name is PTA_TX_CONF (as in the data sheet).

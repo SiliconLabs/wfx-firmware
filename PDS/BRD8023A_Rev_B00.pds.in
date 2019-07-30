@@ -16,8 +16,8 @@
 
 // Information about this PDS version
 HEADER: {
-    VERSION_MAJOR: 2,
-    VERSION_MINOR: 3
+    VERSION_MAJOR: 3,
+    VERSION_MINOR: 0
 },
 
 /**********************/
@@ -363,60 +363,3 @@ RF_ANTENNA_SEL_DIV_CFG: {
     }
     */
 },
-
-/*********************/
-/* PTA configuration */
-/*********************/
-/*
-PTA_CFG: {
-    // PTA Mode selection, enum: EPTA_MODE_NO_BT, EPTA_MODE_PTA_1W_WL_MASTER, EPTA_MODE_PTA_1W_BT_MASTER,
-	// EPTA_MODE_PTA_2W, EPTA_MODE_PTA_3W
-    PTA_MODE: EPTA_MODE_NO_BT,
-
-    // PTA settings :
-    // setting the EnOverrideBt bit to 1 indicate the BT grant could be broken if WLAN won the arbitration
-    // setting the NoCombine bit to 1 forces EPTA
-    // setting the GrantBt bit to 1 allows BT to override WLAN
-    // setting the GrantWlan bit to 1 allows WLAN to override BT
-    // setting the ProtectWlanRx bit to 1 prevents BT to be granted when WLAN is receiving a response
-    // setting the ProtectWlanTx bit to 1 prevents BT to be granted when WLAN is transmitting
-    // setting the TxConfControl bit to 1 specifies the TX conf value
-    SETTINGS: 0b_0101_0110,
-    //           |||| |||'- EnOverrideBt:1
-    //           |||| ||'-- NoCombine:1
-    //           |||| |'--- GrantBt:1
-    //           |||| '---- GrantWlan:1
-    //           |||'------ ProtectWlanRx:1
-    //           ||'------- ProtectWlanTx:1
-    //           |'-------- TxConfControl:1
-    //           '--------- Reserved:1
-
-    // PTA invert pin selection
-    // when a bit is set to 1, the pin logic is inverted
-    PIN_INVERT: 0b_0000_0000,
-    //             |||| |||+ invert PTA_RF_ACT  (input)
-    //             |||| ||+  invert PTA_STATUS  (input)
-    //             |||| |+   invert PTA_FREQ    (input)
-    //             |||| +    invert PTA_TX_CONF (input)
-    //             |||+      invert PTA_FREQ    (output)
-    //             ||+       invert PTA_TX_CONF (output)
-    //             ++        Reserved:2
-
-    // TX conf valid time it the time in us from BT_RF_ACTIVE to TX_CONF assertion
-    TX_CONF_TIMING: 0x48,
-    //                ++ TXConfValideTime:7
-    //                +  Reserved:1
-
-    // Priority sampling time is the time in us after BT_RF_ACTIVE when BT_FREQ should be sampled
-    // TX RX sampling time is the time in us from BT_RF_ACTIVE to the sampling if TXRX
-    STATUS_TIMING: 0x3209,
-    //               ||++ PrioritySamplingTime:8
-    //               ++   TxRxSamplingTime:8
-
-    // priority matrix given for BT
-    PRIORITY: 0x61
-    //          |+ Priority 0:4
-    //          +  Priority 1:4
-
-},
-*/

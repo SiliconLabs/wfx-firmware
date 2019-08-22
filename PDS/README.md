@@ -24,7 +24,7 @@ in order to configure the WFX hardware to match the application.
 * Startup PDS file name and location
 
 | | Linux LMAC driver | MCU FMAC WFX driver
-|---|---|---
+---|---|---
 Final Location|/lib/firmware/wf200.pds| wf200_pds.h (by default)
 Compressed using|`pds_compress --out=pds <my_pds.pds.in> wf200.pds`|`pds_compress --out=c <my_pds.pds.in> wf200_pds.h`
 Info|can use symbolic links| Header file loaded at runtime
@@ -43,10 +43,10 @@ This is typically useful when using the TEST_FEATURE to perform continuous Tx te
 To support this under Lniux, the write-only `/sys/kernel/debug/ieee80211/phy*/wfx/send_pds` file has been added to the filesystem.
 _Upon writing to this file, the data is sent to the FW by the driver as PDS data._
 
-| Linux | MCU
+| | Linux LMAC driver | MCU FMAC WFX driver
 ---|---|---
 Send an already existing .pds file|`cat <file>.pds /sys/kernel/debug/ieee80211/phy*/wfx/send_pds`| load pds file at runtime
-Compress and send a .pds.in file|`pds_compress <file>.pds.in /sys/kernel/debug/ieee80211/phy*/wfx/send_pds`| Compress first and send if OS unable to pipe the operations
+Compress and send a .pds.in file|`pds_compress <file>.pds.in /sys/kernel/debug/ieee80211/phy*/wfx/send_pds`| Compress first and load if OS unable to pipe the operations
 
 ## PDS files details
 

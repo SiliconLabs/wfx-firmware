@@ -23,10 +23,11 @@ in order to configure the WFX hardware to match the application.
 
 * Startup PDS file name and location
 
-Linux LMAC driver | MCU FMAC WFX driver
----|---
-/lib/firmware/wf200.pds|[TBC] wf200.pds
-can use symbolic links|[TBC]
+| | Linux LMAC driver | MCU FMAC WFX driver
+|---|---|---
+Final Location|/lib/firmware/wf200.pds| wf200_pds.h (by default)
+Compressed using|`pds_compress --out=pds <my_pds.pds.in> wf200.pds`|`pds_compress --out=c <my_pds.pds.in> wf200_pds.h`
+Info|can use symbolic links| Header file loaded at runtime
 
 
 _PDS `.pds.in` and **definitions** files can easily be edited with any text editor and benefit from code coloring and
@@ -35,17 +36,17 @@ _PDS `.pds.in` and **definitions** files can easily be edited with any text edit
 _Resulting `.pds` files can be displayed for checking but
   should not be edited. It is recommended to always start from human-readable files such as `.pds.in` files_
 
-### Sending a PDS file during execution
+### Linux: Sending a PDS file during execution
 It is possible to send additional PDS content during execution.
 This is typically useful when using the TEST_FEATURE to perform continuous Tx testing.
 
-To support this, the write-only `/sys/kernel/debug/ieee80211/phy*/wfx/send_pds` file has been added to the filesystem.
+To support this under Lniux, the write-only `/sys/kernel/debug/ieee80211/phy*/wfx/send_pds` file has been added to the filesystem.
 _Upon writing to this file, the data is sent to the FW by the driver as PDS data._
 
-Linux | MCU (TBD)
----|---
-Send an already existing .pds file: `cat <file>.pds /sys/kernel/debug/ieee80211/phy*/wfx/send_pds`|
-Compress and send a .pds.in file:`pds_compress <file>.pds.in /sys/kernel/debug/ieee80211/phy*/wfx/send_pds`|
+| Linux | MCU
+---|---|---
+Send an already existing .pds file|`cat <file>.pds /sys/kernel/debug/ieee80211/phy*/wfx/send_pds`| load pds file at runtime
+Compress and send a .pds.in file|`pds_compress <file>.pds.in /sys/kernel/debug/ieee80211/phy*/wfx/send_pds`| Compress first and send if OS unable to pipe the operations
 
 ## PDS files details
 
@@ -235,31 +236,3 @@ The `-c` or `--out=c` formats the PDS data as a PDS_COMPRESS_MSG structure. The 
 
     #endif
 
-### TEST_FEATURE.pds.in minimal file for continuous Tx testing
-
-    #include "definitions.in"
-
-    /*************************/
-    /* Tests and debug modes */
-    /*************************/
-    TEST_FEATURE_CFG_ELT: {
-        // Wi-Fi channel to use. Accepted range is from 1 to 14.
-        TEST_CHANNEL: 11,
-        // TEST_MODE selects the activated test feature: enum = 'rx', 'tx_packet', 'tx_cw'
-        TEST_MODE: tx_cw,
-        // TEST_IND period in ms at which an indication message is sent.
-        //       In the case of rx test, it returns the measurement results (PER)
-        TEST_IND: 1000,
-
-        // CFG_TX_CW: additional configuration for tx_cw mode
-        CFG_TX_CW: {
-            // CW_MODE CW mode: enum 'single' or 'dual'
-            CW_MODE: single,
-            // FREQ1 frequency offset -31 to 31 (in 312.5kHz)
-            FREQ1: 1,
-            // FREQ2 frequency offset -31 to 31 (in 312.5kHz)
-            FREQ2: 2,
-            // MAX_OUTPUT_POWER indicates the max Tx power value in quarters of dBm
-            MAX_OUTPUT_POWER: 68
-        },
-    },

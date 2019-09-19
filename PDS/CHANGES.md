@@ -3,23 +3,23 @@ Platform Data Set (PDS) release note
 
 # Version 3.0
 ## FW compatibility
-* PDS version 3.0 is required for FW 3.0.0
+* PDS API version 3.0 is required for FW 3.0.0
 
 ## New Features/Improvements
-* Removed PTA section
+* Removed PTA_CFG section (PTA is now controlled via FW API)
 
 
 # Version 2.4
 ## FW compatibility
-* PDS version 2.4 is required for FW 2.2.3
+* PDS API version 2.4 is required for FW 2.2.3
 
 ## New Features/Improvements
-* PTA updates
+* PTA API updates (new fields). NB: PTA section commented/disabled in pds.in files
 
 
 # Version 2.3
 ## FW compatibility
-* PDS version 2.3 is required for FW 2.2.2
+* PDS API version 2.3 is required for FW 2.2.2
 
 ## New Features/Improvements
 * MAX_TX_POWER_CFG section renamed to RF_POWER_CFG
@@ -55,3 +55,4 @@ Platform Data Set (PDS) release note
 # Version 2.0
 ## FW compatibility
 * PDS version 2.0 is the initial delivery, to work with FW 2.0.0
+

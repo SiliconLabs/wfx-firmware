@@ -1,99 +1,67 @@
-# PDS (Platform Data Set) 'definition' files
+# PDS (Platform Data Set) template and definitions files
 
-**P**latform **D**ata **S**et (**PDS**) files contain configuration
- values sent by the WFX driver to the WFX firmware.
+**P**latform **D**ata **S**et (**PDS**) files contain firmware configuration values to match the hardware (I/O pinout) and the application (activating features/configuring the behavior).
 
-## Definitions files
-The firmware-version related **definitions** files define FW-usable 
-values for all human-readable `PDS section` and `PDS parameter` names,
-pretty much the same way a C header file is used.
+## PDS `template.pds.in`
 
-The **definitions** files are referenced with a '#include' by the
- `.pds.in` files and pre-processed by the `pds_compress` script
- (pretty much as a C pre-compiler would work) to obtain
-  a more compact file and reduce the amount of data to send to the FW.
+`template.pds.in` lists all possible PDS sections and parameters which can be sent to WFx firmware. It
+ contains inline documentation on PDS sections and parameters.
 
-**definitions** files evolve following the `PDS API` version,
-whenever new PDS fields or sections are added or removed.
+When looking for the latest information on PDS sections and parameters, refer to the PDS template.
 
-See the [PDS API Release Note][1] for details on PDS API
+When creating a custom PDS file, refer to the PDS template and copy required sections to your custom PDS file, using the inline documentation to select PDS parameter values.
 
-See the [wfx-pds README][2] for details on PDS files
+## PDS `definitions.in`
 
-* definitions`.in` file (abstract)
-```
-/*
- * These definitions come from firmware 3.0.0 headers
- */
-#ifndef DEFINITIONS_3_0_0_IN
-#define DEFINITIONS_3_0_0_IN
+`definitions.in` defines values for all **PDS sections** and **PDS parameters**. It is referenced by custom PDS files and PDS files provided in the [wfx-pds repository][PDS_REPO] to obtain the final `.pds` file.
 
-/*
- * Nodes declarations
- */
-#define HEADER              a
-#define     VERSION_MAJOR           a
-#define     VERSION_MINOR           b
+## Hardware-specific PDS files
 
-#define PROG_PINS_CFG       b
-#define     GPIO_FEM_1              a
-#define     GPIO_FEM_2              b
-#define     GPIO_FEM_3              c
-#define     GPIO_FEM_4              d
-#define     GPIO_FEM_5              e
-#define     GPIO_FEM_6              f
-#define     GPIO_PDET               g
-#define     GPIO_PTA_TX_CONF        h
-#define     GPIO_PTA_RF_ACT         i
-#define     GPIO_PTA_STATUS         j
-#define     GPIO_PTA_FREQ           k
-#define     GPIO_WUP                l
-#define     GPIO_WIRQ               m
-#define     RESERVE2                n
-#define         SLEW_RATE               a
-#define         PULL_UP_DOWN            b
-#define         SLEEP_CFG               c
-#define         PIN_MODE                d
-#define         GPIO_ID                 e
+Hardware-specific PDS files are created based on the PDS template and PDS definitions files to match various boards.
 
-#define HIF_PINS_CFG        c
-. . .
+Hardware-specific PDS files for Silicon Labs evaluation boards are stored in the [wfx-pds repository][PDS_REPO].
 
-#define FEM_CFG                 f
-. . .
-#define RF_POWER_CFG       h
-. . .
-#define RF_ANTENNA_SEL_DIV_CFG j
-. . .
-/*
- * Attribute values
- */
+## PDS flow
 
-// Generic values
-#define disabled 0
-#define enabled  1
-#define no       0
-#define yes      1
-#define off      0
-#define on       1
-// PROG_PINS_CFG.*.PULL_UP_DOWN
-// PROG_PINS_CFG.*.SLEEP_CFG
-#define none  0
-#define down  1
-#define up    3
-#define maintain   4
-// PROG_PINS_CFG.*.MODE
-#define tri      0
-#define func     1
-#define gpio     2
-// RF_POWER_CFG.RF_PORT
-#define RF_PORT_BOTH 0
-#define RF_PORT_1  1
-#define RF_PORT_2  2
-. . .
-#endif
+PDS input files are like C header files while PDS output data uses a compressed format:
 
-```
+* For easy editing, PDS input files (`.pds.in`) are in a human-readable format, with inline documentation.
 
-[1]: https://github.com/SiliconLabs/wfx-firmware/blob/master/PDS/CHANGES.md
-[2]: https://github.com/SiliconLabs/wfx-pds/blob/master/README.md
+* To fit embedded applications, `.pds.in` files are compressed using the [pds_compress][PDS_CMP] (_python3 script_) tool to the `.pds` file format.
+
+The PDS generation flow is:
+
+* Edit
+  * Copy/paste an existing PDS file or start from `template.pds.in`
+  * In `<custom>.pds.in`, include `definitions.in`
+  * Use the inline comments to define
+    * The sections to use
+    * The values to set
+  * Remove unused sections
+  * Add required sections from `template.pds.in` if starting from an existing PDS file
+  * Set values (from `definitions.in`) to match the hardware and define the behavior
+* Compress
+  * compress your `.pds.in` file to `.pds` using [pds_compress][PDS_CMP]
+* Store
+  * Linux: copy the `.pds` file under /lib/firmware/wf200.pds
+  * RTOS: recompile with the new PDS data
+* Send (by the WFx driver)
+  * During each start-up phase, the WFx driver sends the `.pds` file after FW download & FW start
+
+### Compressing PDS files
+
+Use `pds_compress [options] INPUT [OUTPUT]` to compress a `.pds.in` file to a `.pds` file,
+ ready to be sent to the WFX firmware.
+
+Use `pds_compress --help` to display the help
+
+Typical use:
+
+* Linux: `pds_compress <custom>.pds.in <custom>.pds`
+* RTOS: `pds_compress --out=c <custom>.pds.in <custom>.h`
+
+_Resulting `.pds` files should not be edited. It is recommended to always start from human-readable files such as `.pds.in` files_
+
+[FW_REPO]: https://github.com/SiliconLabs/wfx-firmware
+[PDS_DOC]: https://github.com/SiliconLabs/wfx-pds/blob/master/README.md
+[PDS_REPO]: https://github.com/SiliconLabs/wfx-pds

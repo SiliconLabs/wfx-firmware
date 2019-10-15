@@ -1,28 +1,29 @@
-# WFX_FIRMWARE
+# WFX firmware
 
-Contains WFx secured firmware and PDS file examples.
+This repository contains:
 
-* Secured Firmware image **.sec** file is an authenticated and encrypted 
-binary for WFx family of chips and modules.
-* Platform Data Set (i.e. PDS) (**.pds** under Linux, **.h** otherwise) 
- is a platform-dependent configuration file. It is generated from a 
- **.pds.in** file using the `pds_compress` tool (available from 
- https://github.com/SiliconLabs/wfx-linux-tools).
+* WFx secured firmware file
+* The [WFx release note][FW_RELEASE]
+* PDS (Platform Data Set) files
+  * PDS definitions
+  * PDS template
 
-Both files need to be downloaded to the chip/module at boot.
+## WFx secured firmware files
 
-**`git clone` this repository on your system.**
+The secured firmware **wfm_wf200_C0.sec** file is an authenticated and encrypted binary for the WFx family of chips and modules.
 
-Linux driver from Silicon Laboratories from
- https://github.com/SiliconLabs/wfx-linux-driver are expecting the 
- firmware and pds files to be located in `/lib/firmware` and named 
- `wfm_wf200.sec` and `wf200.pds`, respectively.
-You need to create a symbolic link or a copy into `/lib/firmware` and
- rename the files accordingly.
+## PDS (Platform Data Set) files
 
+Look into [wfx-firmware/PDS/README.md][FW_DOC] for details about `PDS/definitions.in` and `PDS/template.pds.in`.
 
-> **Linux naming convention:**
-> - The sec file should be named `/lib/firmware/wfm_wf200.sec`
-> - The pds file should be named `/lib/firmware/wf200.pds`
+## Related drivers
 
+The WFx firmware is loaded by:
 
+* The [wfx-linux-driver][DRV_LINUX_REPO] for Linux applications
+* The [wfx-fullMAC-driver][DRV_FMAC_REPO] for RTOS or bare-metal applications
+
+[DRV_LINUX_REPO]: https://github.com/SiliconLabs/wfx-linux-driver
+[DRV_FMAC_REPO]: https://github.com/SiliconLabs/wfx-fullMAC-driver
+[FW_RELEASE]: CHANGES.md
+[FW_DOC]: https://github.com/SiliconLabs/wfx-firmware/blob/master/PDS/README.md

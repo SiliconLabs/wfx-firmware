@@ -1,7 +1,20 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.1.1
+(release date 2019-10-14)
+
+## Bug fixes
+* [1399] - [PHY] Fix assertion on simultaneous received events
+
+## Known issues
+* [1344] - [PTA] Dynamic control of PTA settings does not work as expected
+* [1376] - [HIF] Communication corruptions using SPI at low speed (< 1.5 MHz)
+* [1388] - [TESTFEAT] an RX RF test does not work after a TX RF test
+
 # Release 3.1.0
+**WARNING: Use not recommended due to bug [1399]**
+
 (release date 2019-09-13)
 
 ## New Features/Improvements
@@ -19,9 +32,10 @@ WFx Firmware Release Note
 * [1068] - [UMAC] Incorrect event on AP connection failure
 
 ## Known issues
+* [1399] - [PHY] Assert causing instabilities in softAP and station mode
 * [1344] - [PTA] Dynamic control of PTA settings does not work as expected
 * [1376] - [HIF] Communication corruptions using SPI at low speed (< 1.5 MHz)
-* [1388] - [TESTFEAT] RX test feature does not work
+* [1388] - [TESTFEAT] an RX RF test does not work after a TX RF test
 
 # Release 3.0.0
 (release date 2019-07-26)
@@ -42,7 +56,7 @@ WFx Firmware Release Note
 
 ## Known issues
 * [1344] - [PTA] Dynamic control of PTA settings does not work as expected
-* [1388] - [TESTFEAT] RX test feature does not work
+* [1388] - [TESTFEAT] An RX RF test does not work after a TX RF test
 
 # Release 2.3.0
 (release date 2019-06-24)

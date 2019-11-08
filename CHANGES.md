@@ -1,6 +1,28 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.3.0
+(release date 2019-11-08)
+
+## New Features/Improvements
+* [1378] - [PTA] Improve PTA general behavior and stability
+* [1077] - [LMAC] Estimate and compensate beacon reception deviation to improve power consumption
+* [1043] - [UMAC] support channel 14
+* [1383] - [UMAC] Improve behavior in combo mode when both interfaces are on the same channel
+* [1396] - [UMAC] Add WPA3 and PMF information to the security mode bitmask in scan result indication
+* [1402] - [UMAC] Add support for directed unicast scan
+
+## Bug fixes
+* [1395] - [PHY] Improve absolute CCA mode stability
+* [1344] - [PTA] Fix dynamic control of PTA settings
+* [1376] - [HIF] Fix communication issues using SPI low speed (around 1 MHz)
+* [1404] - [TESTFEAT] Fix failing CW when in power save mode
+* [1388] - [TESTFEAT] Fix RX RF test not working after a TX RF test
+* [1410] - [UMAC] Fix failing WPA2 connection in combo mode on specific access points
+
+## Known issues
+* [1392] - [HIF] Communication issues in message mode using SDIO at low speed (around 400 KHz)
+
 # Release 3.1.1
 (release date 2019-10-14)
 
@@ -9,7 +31,7 @@ WFx Firmware Release Note
 
 ## Known issues
 * [1344] - [PTA] Dynamic control of PTA settings does not work as expected
-* [1376] - [HIF] Communication corruptions using SPI at low speed (< 1.5 MHz)
+* [1376] - [HIF] Communication corruptions using SPI at low speed (around 1 MHz)
 * [1388] - [TESTFEAT] an RX RF test does not work after a TX RF test
 
 # Release 3.1.0

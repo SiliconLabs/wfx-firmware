@@ -1,5 +1,17 @@
-Platform Data Set (PDS) release note
+Platform Data Set (PDS) API release note
 ====================================
+
+# Version 4.0
+## FW compatibility
+* PDS API version 4.0 is required for FW 3.2.0
+
+## New Features/Improvements
+* HIF_PINS_CFG / SDIO_* / SLEEP_CFG : by default no pulls are set
+* HIF_PINS_CFG / SDIO_* / PULL_UP_DOWN : by default no pulls are set.
+* FEM matrix configuration simplified
+* FRONT_END_LOSS_CORRECTION_QDB renamed as FRONT_END_LOSS_TX_QDB (value in 1/4dB)
+* RSSI_CORRECTION renamed as FRONT_END_LOSS_RX_QDB (value in 1/4dB)
+
 
 # Version 3.0
 ## FW compatibility

@@ -1,8 +1,8 @@
 /*
- * These definitions come from firmware 3.0.0 headers
+ * These definitions come from firmware 3.2.0 headers
  */
-#ifndef DEFINITIONS_3_0_0_IN
-#define DEFINITIONS_3_0_0_IN
+#ifndef DEFINITIONS_4_0_IN
+#define DEFINITIONS_4_0_IN
 
 /*
  * Nodes declarations
@@ -24,7 +24,6 @@
 #define     GPIO_PTA_FREQ           k
 #define     GPIO_WUP                l
 #define     GPIO_WIRQ               m
-#define     RESERVE2                n
 #define         SLEW_RATE               a
 #define         PULL_UP_DOWN            b
 #define         SLEEP_CFG               c
@@ -45,11 +44,13 @@
 #define     XTAL_SHARED             b
 #define     XTAL_TEMP_COMP          c
 #define FEM_CFG                 f
-#define     FEM_CTRL_PINS_MATRIX    a
-#define         NO_PTA                  a
-#define         COEX_EXCLUSIVE          b
-#define         WLAN_EXCLUSIVE          c
-#define         COEX_WL_COMBINED        d
+#define     FEM_CTRL_PINS           c
+#define         COEX_ONLY               a
+#define         WLAN_ONLY_RX            b
+#define         WLAN_ONLY_IDLE          c
+#define         WLAN_ONLY_TX            d
+#define         COMBINED_WLAN_RX        e
+#define         COMBINED_WLAN_IDLE      f
 #define     FEM_TIMINGS             b
 #define         TX_EN_DELAY             a
 #define         TX_DIS_DELAY            b
@@ -60,11 +61,11 @@
 #define RF_POWER_CFG       h
 #define     RF_PORT                 e
 #define     MAX_OUTPUT_POWER_QDBM   a
-#define     FRONT_END_LOSS_CORRECTION_QDB b
+#define     FRONT_END_LOSS_TX_QDB   b
 #define     BACKOFF_QDB             c
 #define         CHANNEL_NUMBER          a
 #define         BACKOFF_VAL             b
-#define     RSSI_CORRECTION         d
+#define     FRONT_END_LOSS_RX_QDB   d
 #define TEST_FEATURE_CFG    i
 #define     TEST_CHANNEL_FREQ       a
 #define     TEST_MODE               b
@@ -85,20 +86,10 @@
 #define RF_ANTENNA_SEL_DIV_CFG j
 #define     RF_PORTS                a
 #define     DIVERSITY               b
-#define     EXT_SWITCH_CONTROL      c
-#define         NB_ANTENNA              a
-#define         NB_GPIO                 b
-#define         GPIO_ID_1               c
-#define         GPIO_ID_2               d
-#define         GPIO_ID_3               e
 
 /*
  * Attribute values
- * These value should more or less follow output of
- *   sed -ne "s/[\t ]*PDS_\([A-Z0-9_]*\)[\t ]*=[\t ]*'\?\([0-9A-Z_]*\)'\?,\?/#define \1 \2/p" export/pds_parser_defs.h | tr "[A-Z]" "[a-z]"
  */
-
-
 // Generic values
 #define disabled 0
 #define enabled  1
@@ -129,7 +120,6 @@
 // DRF_ANTENNA_SEL_DIV_CFG.DIVERSITY
 #define OFF      0
 #define INTERNAL 1
-#define EXTERNAL 2
 // TEST_CFG_MSG.TEST_FEATURE_CFG.TEST_MODE
 #define tx_cw     0
 #define tx_packet 1
@@ -140,7 +130,7 @@
 // TEST_CFG_MSG.TEST_FEATURE_CFG.CFG_TX_PACKET.HT_PARAM
 #define MM        0
 #define GF        1
-// Rate Selection 
+// Rate Selection
 #define B_1Mbps   0
 #define B_2Mbps   1
 #define B_5_5Mbps 2

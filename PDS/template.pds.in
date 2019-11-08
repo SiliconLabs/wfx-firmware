@@ -2,20 +2,20 @@
  * The PDS is used to enter configuration data.
  *
  * This file is a template that shows all elements that exist.
- * Sections PROG_PINS_CFG, HIF_PINS_CFG and HF_CLK contain hardware default values.
- * Please do not use it with real hardware: copy it and update it to fit to your own hardware. 
+ * Sections PROG_PINS_CFG and HIF_PINS_CFG contain hardware default values (i.e. after reset, before PDS download).
  *
+ * Please do not use it with real hardware: copy it and update it to fit to your own hardware.
  * It should then be processed by the pds_compress script to generate the compressed
  * data to be provided either to the Linux driver or to the Full MAC driver.
  *
  * Unneeded sections can be commented (like in ANSI C) or deleted.
  */
 
-#include "definitions-3.0.0.in"
+#include "definitions.in"
 
 // PDS API version
 HEADER: {
-    VERSION_MAJOR: 3,
+    VERSION_MAJOR: 4,
     VERSION_MINOR: 0
 },
 
@@ -23,9 +23,9 @@ HEADER: {
 /* Pins configuration */
 /**********************/
 
-// Pad configuration of programmable pins
+// Configuration of programmable pins
 PROG_PINS_CFG: {
-    // For each PROGrammable pin in this section
+    // For each programmable pin in this section
     // SLEW_RATE sets the maximum slew rate on the pin. Type: integer value between 0 and 6 (6=max drive strength)
     // PULL_UP_DOWN allows to add a pull-up or pull-down on the pad. Type: enum = 'none', 'down', 'up'
     // SLEEP_CFG allows to add a pull-up or pull-down on the pad while in sleep mode. Type: enum = 'none', 'down', 'up', 'maintain'
@@ -122,51 +122,32 @@ PROG_PINS_CFG: {
         SLEEP_CFG: none,
         PIN_MODE: tri,
         GPIO_ID: M
-    },
-    RESERVE2: {
-        SLEW_RATE: 4,
-        PULL_UP_DOWN: none,
-        SLEEP_CFG: none,
-        PIN_MODE: tri,
-        GPIO_ID: O
     }
 },
 
-// Pad configuration of HIF pins
+// Configuration of Host Interface (HIF) pins
 HIF_PINS_CFG: {
     // For each HIF pin in this section
-    // SLEW_RATE sets the maximum slew rate on the pin. Type: integer value between 0 and 6
-    // PULL_UP_DOWN allows to add a pull-up or pull-down on the pad. Type: enum = 'none', 'down', 'up'
-    // SLEEP_CFG allows to add a pull-up or pull-down on the pad while in sleep mode. Type: enum = 'none', 'down', 'up'
+    // SLEW_RATE sets the maximum slew rate on the pin. Type: integer value between 0 and 6 (6=max drive strength)
+    // SLEEP_CFG for SDIO_D0_SPI_MISO allows to add a pull-up or pull-down on the pad while in sleep mode. Type: enum = 'none', 'down', 'up'
     SDIO_CLK_SPI_CLK: {
-        SLEW_RATE: 6,
-        PULL_UP_DOWN: none,
-        SLEEP_CFG: none
+        SLEW_RATE: 4
     },
     SDIO_CMD_SPI_MOSI: {
-        SLEW_RATE: 6,
-        PULL_UP_DOWN: none,
-        SLEEP_CFG: none
+        SLEW_RATE: 6
     },
     SDIO_D0_SPI_MISO: {
         SLEW_RATE: 6,
-        PULL_UP_DOWN: none,
-        SLEEP_CFG: down
+        SLEEP_CFG: none
     },
     SDIO_D1_SPI_WIRQ: {
-        SLEW_RATE: 6,
-        PULL_UP_DOWN: none,
-        SLEEP_CFG: none
+        SLEW_RATE: 6
     },
     SDIO_D2_HIF_SEL: {
-        SLEW_RATE: 6,
-        PULL_UP_DOWN: none,
-        SLEEP_CFG: none
+        SLEW_RATE: 6
     },
     SDIO_D3_SPI_CSN: {
-        SLEW_RATE: 6,
-        PULL_UP_DOWN: none,
-        SLEEP_CFG: none
+        SLEW_RATE: 6
     }
 },
 
@@ -177,16 +158,16 @@ HIF_PINS_CFG: {
 HF_CLK: {
     // XTAL_CFG allows to fine tune XTAL Oscillator frequency
     XTAL_CFG: {
-        // CTUNE_FIX allows to set a high value capacitance on both Xi and Xo. Type: integer between 0 and 3 (default =3)
+        // CTUNE_FIX allows to set a high value capacitance on both XTAL_I and XTAL_O. Type: integer between 0 and 3 (default = 3)
         CTUNE_FIX: 3,
         // CTUNE_XI allows to fine tune the capacitor on pin XTAL_I. Type: integer between 0 and 255 (default = 140)
         CTUNE_XI: 41,
         // CTUNE_XO similar to CTUNE_XI for XTAL_O pin
         CTUNE_XO: 41
     },
-    // XTAL_SHARED to indicate if the crystal is shared with another IC and thus must be kept active during sleep
+    // XTAL_SHARED indicates if the crystal is shared with another IC and thus must be kept active during sleep. Type: enum = 'no', 'yes'
     XTAL_SHARED: no,
-    // XTAL_TEMP_COMP to activate or deactivate the temperature compensation "enabled"/"disabled"
+    // XTAL_TEMP_COMP activates or deactivates the XTAL temperature compensation. Type: enum = 'enabled', 'disabled'
     XTAL_TEMP_COMP: disabled
 },
 
@@ -194,70 +175,37 @@ HF_CLK: {
 /* FEM configuration */
 /*********************/
 
-FEM_CFG: {    
-    FEM_CTRL_PINS_MATRIX: {
-        //  FEM LUT is split in 4 sections
-        //  A '1' activates a FEM pin at particular moment
-        //  in each section the row index[2-0] bits correspond to the 3 selection input signals coming from the HW:
-        //       index[0]=LNA_enable (currently not used then '0')
-        //       index[1]=Rx_enable
-        //       index[2]=Tx_enable
-        //  pin FEM_4 is not present in theses tables because it is the PA_enable signal
-        //             .-- FEM_6
-        //             | .- FEM_5
-        //             | |.- FEM_3
-        //             | ||.- FEM_2
-        //             | |||.- FEM_1
-        NO_PTA: [ //   | ||||
-                     0b0_0000, // Reserved
-                     0b0_0000, // Reserved
-                     0b0_0000, // Reserved
-                     0b0_0000, // Reserved
-                     0b0_0000, // Reserved
-                     0b0_0000, // Reserved
-                     0b0_0000, // Reserved
-                     0b0_0000  // Reserved
-        ],
-        COEX_EXCLUSIVE: [
-                     0b0_0000, // Coex has priotiry ( Wlan Inactive )
-                     0b0_0000, // Coex has priotiry ( Wlan Inactive )
-                     0b0_0000, // Coex has priotiry ( Wlan RX )
-                     0b0_0000, // Coex has priotiry ( Wlan tbd )
-                     0b0_0000, // Coex has priotiry ( Wlan TX )
-                     0b0_0000, // Coex has priotiry ( Wlan tbd )
-                     0b0_0000, // Reserved
-                     0b0_0000  // Reserved
-        ],
-        WLAN_EXCLUSIVE: [
-                     0b0_0000, // WLAN is inactive, Give Antenna to Coex
-                     0b0_0000, // WLAN is inactive, Give Antenna to Coex
-                     0b0_0000, // WLAN RX
-                     0b0_0000, // WLAN tbd
-                     0b0_0000, // WLAN TX
-                     0b0_0000, // WLAN tbd
-                     0b0_0000, // Reserved
-                     0b0_0000  // Reserved
-        ],
-        COEX_WL_COMBINED: [
-                     0b0_0000, // WLAN is inactive, Give Antenna to Coex
-                     0b0_0000, // WLAN is inactive, Give Antenna to Coex
-                     0b0_0000, // Coex + WLAN RX
-                     0b0_0000, // tbd
-                     0b0_0000, // Coex + WLAN TX
-                     0b0_0000, // tbd
-                     0b0_0000, // Reserved
-                     0b0_0000  // Reserved
-        ]
+FEM_CFG: {
+    FEM_CTRL_PINS: {
+        // defines state of FEM pins 1 to 6 depending on priority given to COEX and WLAN, and WLAN interface TX/RX state
+        // notes:
+        // - each bit indicates the pin level for each state
+        // - pin FEM_4 is not present because it is the PA_enable signal
+        // - keys with prefix WLAN_ONLY are the only used if PTA is not enabled
+        //                      .-- FEM_6
+        //                      | .- FEM_5
+        //                      | |.- FEM_3
+        //                      | ||.- FEM_2
+        //                      | |||.- FEM_1
+        //                      | ||||
+        WLAN_ONLY_IDLE:       0b0_0000,  // FEM control signals for WLAN when not transmitting nor receiving
+        WLAN_ONLY_RX:         0b0_0000,  // FEM control signals for WLAN when receiving
+        WLAN_ONLY_TX:         0b0_0000,  // FEM control signals for WLAN when transmitting
+        COEX_ONLY:            0b0_0000,  // FEM control signals to provide the antenna to coexisting RF
+        COMBINED_WLAN_IDLE:   0b0_0000,  // control signals to set FEM in Rx for both WLAN and COEX (WLAN not receiving)
+        COMBINED_WLAN_RX:     0b0_0000   // control signals to set FEM in Rx for both WLAN and COEX (WLAN actually receiving)
     },
 
     FEM_TIMINGS: {
+        // define related timings on FEM signals
         // Delays are in 12.5ns units
-        TX_EN_DELAY:  0,
-        TX_DIS_DELAY: 0,
-        PA_EN_DELAY:  0,
-        PA_DIS_DELAY: 0,
-        RX_EN_DELAY:  0,
-        RX_DIS_DELAY: 0
+        // Format integer
+        TX_EN_DELAY:  16,  // max 65535, default value 16 => 0.2 us
+        TX_DIS_DELAY: 13,  // max 255, default value 13 => 0.1625 us
+        PA_EN_DELAY:  130, // max 255, default value 130 => 1.625 us
+        PA_DIS_DELAY: 5,   // max 255, default value 5 => 0.0625 us
+        RX_EN_DELAY:  0,   // max 255, default value 0
+        RX_DIS_DELAY: 0    // max 255, default value 0
     }
 },
 
@@ -267,63 +215,68 @@ FEM_CFG: {
 
 // Tx power-related information
 RF_POWER_CFG: {
-    // Designate the rf port affected by the following configurations
-    // RF_PORT_1, RF_PORT_2, RF_PORT_BOTH(default)
+    // Designate the RF port affected by the following configurations
+    // Thus it must always be the first element of this section (else it is ignored)
+    // RF_PORT_1, RF_PORT_2, RF_PORT_BOTH (default)
     RF_PORT: RF_PORT_BOTH,
 
-    // The max Tx power value in quarters of dBm. Type: signed integer between -128 and 127
-    // Resultant covered range in dBm: [-32; 31.75]
-    // It is used to limit the Tx power. Thus a value larger than 80 does not make sens.
+    // The max Tx power value in quarters of dBm. Type: signed integer between -128 and 127 (range in dBm: [-32; 31.75])
+    // It is used to limit the Tx power. Thus a value larger than 80 (default) does not make sense.
     MAX_OUTPUT_POWER_QDBM: 80,
 
     // Front-end loss (loss between the chip and the antenna) in quarters of dB.
-    // Type: signed integer between -128 and 127
-    // Resultant covered range in dB: [-32; 31.75]
+    // Type: signed integer between -128 and 127 (range in dB: [-32; 31.75])
     // This value must be positive when the front end attenuates the signal and negative when it amplifies it.
-    FRONT_END_LOSS_CORRECTION_QDB: 0,
+    // Values on Rx path and Tx path can be different thus 2 values are provided here
+    // Default values are 0 for both
+    FRONT_END_LOSS_TX_QDB: 0,
+    FRONT_END_LOSS_RX_QDB: 0,
 
     // Backoff vs. Modulation Group vs Channel
-    // CHANNEL_NUMBER: Designate a channel number(an integer) or a range of channel numbers (an array)
-    // CHANNEL_NUMBER: [3, 9] : Channels from 3 to 9
+    // CHANNEL_NUMBER: Designate a channel number (an integer) or a range of channel numbers (an array)
+    // e.g. CHANNEL_NUMBER: [3, 9]: Channels from 3 to 9
     //
-    // BACKOFF_VAL is given in quarters of dB. Type : unsigned integer. Covered range in dB: [0; 63.75]
-    // Each value sets a backoff (=additional attenuation) for a group of modulations.
-    // A modulation group designates a subset of modulations :
-    //   *  MOD_GROUP_0 : B_1Mbps, B_2Mbps, B_5.5Mbps, B_11Mbps
-    //   *  MOD_GROUP_1 : G_6Mbps, G_9Mbps, G_12Mbps, N_MCS0,  N_MCS1,
-    //   *  MOD_GROUP_2 : G_18Mbps, G_24Mbps, N_MCS2, N_MCS3,
-    //   *  MOD_GROUP_3 : G_36Mbps, G_48Mbps, N_MCS4, N_MCS5
-    //   *  MOD_GROUP_4 : G_54Mbps, N_MCS6
-    //   *  MOD_GROUP_5 : N_MCS7
+    // Each backoff value sets an attenuation for a group of modulations.
+    // BACKOFF_VAL is given in quarters of dB. Type: unsigned integer. Covered range in dB: [0; 63.75]
+    // A modulation group designates a subset of modulations:
+    //   *  MOD_GROUP_0: B_1Mbps, B_2Mbps, B_5.5Mbps, B_11Mbps
+    //   *  MOD_GROUP_1: G_6Mbps, G_9Mbps, G_12Mbps, N_MCS0,  N_MCS1,
+    //   *  MOD_GROUP_2: G_18Mbps, G_24Mbps, N_MCS2, N_MCS3,
+    //   *  MOD_GROUP_3: G_36Mbps, G_48Mbps, N_MCS4, N_MCS5
+    //   *  MOD_GROUP_4: G_54Mbps, N_MCS6
+    //   *  MOD_GROUP_5: N_MCS7
     //   BACKOFF_VAL: [MOD_GROUP_0, ..., MOD_GROUP_5]
+    //   Default value: BACKOFF_QDB: [{ CHANNEL_NUMBER: [1,14], BACKOFF_VAL: [0, 0, 0, 0, 0 ,0] } ]
     BACKOFF_QDB: [
         {
             CHANNEL_NUMBER: 1,
             BACKOFF_VAL: [0, 0, 0, 0, 0 ,0]
         },
         {
-            CHANNEL_NUMBER: [2,3],
+            CHANNEL_NUMBER: 2,
             BACKOFF_VAL: [0, 0, 0, 0, 0 ,0]
         },
         {
-            CHANNEL_NUMBER: [4, 9],
+            CHANNEL_NUMBER: [3, 9],
             BACKOFF_VAL: [0, 0, 0, 0, 0 ,0]
         },
         {
-            CHANNEL_NUMBER: [10,12],
+            CHANNEL_NUMBER: 10,
             BACKOFF_VAL: [0, 0, 0, 0, 0 ,0]
         },
         {
-            CHANNEL_NUMBER: 13,
+            CHANNEL_NUMBER: 11,
+            BACKOFF_VAL: [0, 0, 0, 0, 0 ,0]
+        },
+        {
+            CHANNEL_NUMBER: [12, 13],
             BACKOFF_VAL: [0, 0, 0, 0, 0 ,0]
         },
         {
             CHANNEL_NUMBER: 14,
             BACKOFF_VAL: [0, 0, 0, 0, 0 ,0]
         }
-    ],
-
-    RSSI_CORRECTION: 0
+    ]
 },
 
 /********************/
@@ -332,37 +285,21 @@ RF_POWER_CFG: {
 
 RF_ANTENNA_SEL_DIV_CFG: {
     //
-    // Antenna selection:
-    //   - TX1_RX1
-    //   - TX2_RX2
-    //   - TX1_RX2
-    //   - TX2_RX1
-    //   - TX12_RX12
+    // Antenna selection: allows to select the RF port used. Can be different for Tx and Rx (FEM case)
+    //   - TX1_RX1: RF_1 used (default)
+    //   - TX2_RX2: RF_2 used
+    //   - TX1_RX2: Tx on RF_1 and Rx on RF_2
+    //   - TX2_RX1: Tx on RF_2 and Rx on RF_1
+    //   - TX12_RX12: antenna diversity case: both Tx and Rx on the same RF port which is automatically selected (requires DIVERSITY to be set)
     //
     RF_PORTS: TX1_RX1,
 
     //
     // Diversity control mode:
-    //   - OFF
-    //   - INTERNAL
-    //   - EXTERNAL
-    // For the INTERNAL value, RF_PORTS must be set to TX12_RX12
+    //   - OFF (default)
+    //   - INTERNAL: requires RF_PORTS to be set to TX12_RX12
     //
-    DIVERSITY: OFF,
-
-    // External switch control antenna
-    EXT_SWITCH_CONTROL: {
-        NB_ANTENNA: 3,
-        NB_GPIO: 3,
-        //           .---------- GPIO_ID
-        //          |  .------- State Antenna_1
-        //          |  |  .---- State Antenna_2
-        //          |  |  |  .- State Antenna_3
-        //          |  |  |  |
-        GPIO_ID_1: [A, 1, 0, 0],
-        GPIO_ID_2: [B, 0, 1, 0],
-        GPIO_ID_3: [C, 0, 0, 1]
-    }
+    DIVERSITY: OFF
 },
 
 /*********************************/
@@ -370,26 +307,28 @@ RF_ANTENNA_SEL_DIV_CFG: {
 /*********************************/
 
 TEST_FEATURE_CFG: {
-    // TEST_CHANNEL_FREQ can designate either a Wi-Fi channel or a frequency in MHz :
+    // TEST_CHANNEL_FREQ can designate either a Wi-Fi channel or a frequency in MHz:
     //   - [1-14]: Wi-Fi channel to use
     //   - [2300 - 2600]: RF frequency in MHz
     //
     TEST_CHANNEL_FREQ: 11,
+
     // TEST_MODE selects the activated test feature: enum = 'rx', 'tx_packet', 'tx_cw'
     TEST_MODE: tx_packet,
+
     // TEST_IND period in ms at which an indication message is sent.
-    //       In the case of rx test, it returns the measurement results (PER)
+    //       In the case of rx test, it returns the measurement results (PER and RSSI)
     TEST_IND: 1000,
 
     // CFG_TX_CW: additional configuration for tx_cw mode
     CFG_TX_CW: {
-        // CW_MODE CW mode: enum 'single' or 'dual'
+        // CW_MODE CW mode, either single tone (use FREQ1) or dual tone: enum 'single' or 'dual'
         CW_MODE: single,
         // FREQ1 frequency offset -31 to 31 (in 312.5kHz)
         FREQ1: 1,
         // FREQ2 frequency offset -31 to 31 (in 312.5kHz)
         FREQ2: 2,
-        // MAX_OUTPUT_POWER indicates the max Tx power value in quarters of dBm
+        // MAX_OUTPUT_POWER indicates the max Tx power value (for CW only) in quarters of dBm
         MAX_OUTPUT_POWER: 68
     },
 
@@ -401,16 +340,16 @@ TEST_FEATURE_CFG: {
         IFS_US: 0,
         // HT_PARAM HT format (mixed mode or greenfield), enum: 'MM' or 'GF'
         HT_PARAM: MM,
-        // RATE rate selection, enum : B_1Mbps, B_2Mbps, B_5_5Mbps,
+        // RATE rate selection, enum: B_1Mbps, B_2Mbps, B_5_5Mbps,
         //     B_11Mbps, G_6Mbps, G_9Mbps, G_12Mbps, G_18Mbps,
         //     G_24Mbps, G_36Mbps, G_48Mbps, G_54Mbps, N_MCS0,
         //     N_MCS1, N_MCS2, N_MCS3, N_MCS4, N_MCS5, N_MCS6, N_MCS7
         RATE: N_MCS7,
-        // NB_FRAME number of frames to send before stopping. 0 means infinite. Integer from 0 to 65535.
+        // NB_FRAME number of frames to send before stopping. Integer from 0 to 65535 (0 means infinite)
         NB_FRAME: 0,
-        // (REGION) REGULATORY MODE : the WFM200 can be certified for US (FCC), Europe(ETSI) or Japan
-        // and thus its Tx power can be limited to fulfill these radio transmission specifications.
-        // It is possible to force here the different regulatory modes but only for the TX power, not the channel usage limitation.
+        // (REGION) REGULATORY MODE: the WFM200 can be certified for US (FCC), Europe (ETSI) or Japan
+        // and thus its Tx power is limited internally to fulfill these radio transmission specifications.
+        // It is possible to select here the regulatory mode for test purposes. Selection has no impact on channel usage limitation.
         // enum: CERTIFIED_FCC, CERTIFIED_ETSI, CERTIFIED_JAPAN, CERTIFIED_Unrestricted (no power limitation), CERTIFIED_All (applies the most restrictive limitation)
         REG_MODE: CERTIFIED_All
     },

@@ -1,6 +1,18 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.3.1
+(release date 2019-12-06)
+
+## New Features/Improvements
+* [1451] - [UMAC] Improve station interface throughput in combo mode on different channels
+
+## Bug fixes
+* [1466] - [UMAC] Connection to a hidden AP is fixed
+
+## Known issues
+* [1392] - [HIF] Communication issues in message mode using SDIO at low speed (around 400 KHz)
+
 # Release 3.3.0
 (release date 2019-11-08)
 
@@ -22,6 +34,7 @@ WFx Firmware Release Note
 
 ## Known issues
 * [1392] - [HIF] Communication issues in message mode using SDIO at low speed (around 400 KHz)
+* [1466] - [UMAC] Connecting to a hidden AP is not working if not using fast connect
 
 # Release 3.1.1
 (release date 2019-10-14)
@@ -33,6 +46,7 @@ WFx Firmware Release Note
 * [1344] - [PTA] Dynamic control of PTA settings does not work as expected
 * [1376] - [HIF] Communication corruptions using SPI at low speed (around 1 MHz)
 * [1388] - [TESTFEAT] an RX RF test does not work after a TX RF test
+* [1466] - [UMAC] Connecting to a hidden AP is not working if not using fast connect
 
 # Release 3.1.0
 **WARNING: Use not recommended due to bug [1399]**
@@ -58,6 +72,7 @@ WFx Firmware Release Note
 * [1344] - [PTA] Dynamic control of PTA settings does not work as expected
 * [1376] - [HIF] Communication corruptions using SPI at low speed (< 1.5 MHz)
 * [1388] - [TESTFEAT] an RX RF test does not work after a TX RF test
+* [1466] - [UMAC] Connecting to a hidden AP is not working if not using fast connect
 
 # Release 3.0.0
 (release date 2019-07-26)
@@ -79,6 +94,7 @@ WFx Firmware Release Note
 ## Known issues
 * [1344] - [PTA] Dynamic control of PTA settings does not work as expected
 * [1388] - [TESTFEAT] An RX RF test does not work after a TX RF test
+* [1466] - [UMAC] Connecting to a hidden AP is not working if not using fast connect
 
 # Release 2.3.0
 (release date 2019-06-24)

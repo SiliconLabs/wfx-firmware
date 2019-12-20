@@ -1,6 +1,18 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.3.2
+(release date 2019-12-20)
+
+## New Features/Improvements
+* [1484] - [LMAC] Enable CTS-to-self for A-MPDU when asked by the AP
+
+## Bug fixes
+* [1211] - [LMAC] Fix TCP throughput when competing with another device
+
+## Known issues
+* [1392] - [HIF] Communication issues in message mode using SDIO at low speed (around 400 KHz)
+
 # Release 3.3.1
 (release date 2019-12-06)
 

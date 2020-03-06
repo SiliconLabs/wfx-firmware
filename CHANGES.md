@@ -1,6 +1,18 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.4.1
+(release date 2020-03-06)
+
+## New Features/Improvements
+* [1409] - [LMAC] Include a mode adding CSI information to the receive frames
+* [1435] - [LMAC] Add a fast beacon processing mode
+* [1535] - [LMAC] Improve U-APSD mode behavior to improve power consumption
+* [1446] - [UMAC] Add an API to select the CCA mode
+
+## Bug fixes
+* [1392] - [HIF] Communication issues in low-speed SDIO are fixed (around 400 KHz)
+
 # Release 3.3.2
 (release date 2019-12-20)
 

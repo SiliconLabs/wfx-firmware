@@ -16,7 +16,7 @@
 // PDS API version
 HEADER: {
     VERSION_MAJOR: 4,
-    VERSION_MINOR: 0
+    VERSION_MINOR: 1
 },
 
 /**********************/
@@ -302,10 +302,33 @@ RF_ANTENNA_SEL_DIV_CFG: {
     DIVERSITY: OFF
 },
 
+/**************************************/
+/*     external PA configuration      */
+/**************************************/
+
+EXT_PA_CFG: {
+    // PA_USED indicates if external PA is used, which triggers the use of the internal Low Power PA (Type: enum = 'no' (default), 'yes')
+    PA_USED: no,
+
+    // MAX GAIN (in quarters of dB) corresponds to maximum external gain added, rounded to a quarter of dB above
+    MAX_GAIN: 112,
+
+    // POUT versus VDET curve of the external PA
+    CFG_POUT_VS_VDET: {
+        // NB_OF_POINTS allows to set the number of points used to calibrate the curve (max 16). When !=0, the closed loop control of TX output power is triggered.
+        NB_OF_POINTS: 16,
+        // VDET_VAL (in milliVolt) is the Vdet value measured by the chip on FEM_PDET pin, ranging from highest to lowest value
+        VDET_VAL: [1080, 925, 818, 752, 682, 624, 570, 518, 478, 438, 377, 328, 289, 259, 234, 216],
+        // POUT_VAL (in 1/4dBm) is the output power level measured at FEM output port
+        POUT_VAL: [96, 92, 88, 84, 80, 76, 72, 68, 64, 60, 52, 44, 36, 28, 20, 12]
+    }
+},
+
 /*********************************/
 /* RF test feature configuration */
 /*********************************/
 
+// It must be the last section of the file
 TEST_FEATURE_CFG: {
     // TEST_CHANNEL_FREQ can designate either a Wi-Fi channel or a frequency in MHz:
     //   - [1-14]: Wi-Fi channel to use

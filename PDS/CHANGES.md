@@ -1,5 +1,11 @@
 Platform Data Set (PDS) API release note
 ====================================
+# Version 4.1
+## FW compatibility
+* PDS API version 4.1 is required for FW 3.5.0
+
+## New Features/Improvements
+* Added external PA configuration section (only in template and definition files)
 
 # Version 4.0
 ## FW compatibility

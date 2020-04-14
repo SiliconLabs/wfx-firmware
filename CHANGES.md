@@ -1,6 +1,25 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.5.0
+(release date 2020-04-10)
+
+## New Features/Improvements
+* [1551] - [API] Improve errors and exceptions reporting
+* [1563] - [API] Deprecate IBSS support
+* [1554] - [SEC] Increment anti-rollback level to enforce Secure Link security update
+* [1326] - [PHY] Improve channel 14 support
+* [1536] - [PTA] Improve PTA behavior when handling long Coex requests
+* [1555] - [PTA] Improve power consumption when PTA is enable
+* [1426] - [LMAC] Improve scan by allowing the use of antenna diversity
+* [1482] - [LMAC] Add a detection and correction for desynced beacons when in power save mode
+* [1556] - [LMAC] Add an indication when PS-Poll power save mode is not working properly
+* [1488] - [UMAC] Automatically switch to Fast-PS power save mode when PS-Poll is not working properly
+
+## Bug fixes
+* [1456] - [API] Fix WFM200 high temperature safety protection in RF test mode
+* [1552] - [LMAC] Fix a firmware exception related to an unexpected message sequence after a PS-Poll
+
 # Release 3.4.1
 (release date 2020-03-06)
 

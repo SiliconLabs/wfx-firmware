@@ -1,6 +1,17 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.6.0
+(release date 2020-05-06)
+
+## New Features/Improvements
+* [1608] - [API] Further improve errors and exceptions reporting
+* [1602] - [PTA] Update default PTA priority level
+
+## Bug fixes
+* [1572] - [UMAC] Fix a firmware exception triggered in specific conditions when stopping the softAP interface
+* [1611] - [PDS] Fix FEM timings issue
+
 # Release 3.5.0
 (release date 2020-04-10)
 

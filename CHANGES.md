@@ -1,6 +1,16 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.6.1
+(release date 2020-05-20)
+
+## New Features/Improvements
+* [1622] - [API] Add HIF message traces to error log
+
+## Bug fixes
+* [1615] - [UMAC] Fix a firmware exception when releasing a Tx buffer in SoftAP in specific conditions
+* [1629] - [LMAC] Return an error when a wrong AC is set in a EDCA_QUEUE_PARAMS_REQ
+
 # Release 3.6.0
 (release date 2020-05-06)
 

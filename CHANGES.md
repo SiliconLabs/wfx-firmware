@@ -1,6 +1,16 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.7.0
+(release date 2020-06-10)
+
+## New Features/Improvements
+* [1601] - [LMAC] Include selected antenna information in RX_IND packets
+
+## Bug fixes
+* [1632] - [UMAC] Fix interoperability issue when using WPA2 security method (Orinoco AP-700)
+* [1634] - [UMAC] Fix interoperability issue linked to the WMM-PS service period limitation (Netgear R8000)
+
 # Release 3.6.1
 (release date 2020-05-20)
 

@@ -1,6 +1,16 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.8.0
+(release date 2020-07-09)
+
+## New Features/Improvements
+* [1652] - [SEC] Increment anti-rollback level
+* [1598] - [LMAC] Improve scheduling when station uses fast-PS in combo AP/STA mode
+
+## Bug fixes
+* [1640] - [LMAC] Fix an issue with antenna diversity when using a dummy load
+
 # Release 3.7.0
 (release date 2020-06-10)
 

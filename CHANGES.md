@@ -1,6 +1,20 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.9.0
+(release date 2020-08-04)
+
+## New Features/Improvements
+* [1599] - [LMAC] Abort pending frames when station go to sleep
+* [1654] - [SLK] Sync the driver bitmap and firmware bitmap
+
+## Bug fixes
+* [1647] - [UMAC] Fix throughput issues in softAP TCP uplink traffic
+* [1474] - [LMAC] Replayed TKIP/AES fragments are no longer accepted
+* [1648] - [LMAC] Fix wrong starting sequence number when Ack and BlockAck interleave
+* [1655] - [LMAC] Fix wrong probe response to probe request with hidden SSID
+* [1658] - [LMAC] Fix a connection interoperability issue (AP Cisco WAP150)
+
 # Release 3.8.0
 (release date 2020-07-09)
 
@@ -28,7 +42,7 @@ WFx Firmware Release Note
 * [1622] - [API] Add HIF message traces to error log
 
 ## Bug fixes
-* [1615] - [UMAC] Fix a firmware exception when releasing a Tx buffer in SoftAP in specific conditions
+* [1615] - [UMAC] Fix a firmware exception when releasing a Tx buffer in softAP in specific conditions
 * [1629] - [LMAC] Return an error when a wrong AC is set in a EDCA_QUEUE_PARAMS_REQ
 
 # Release 3.6.0
@@ -166,7 +180,7 @@ WFx Firmware Release Note
 * [1317] - [API] PTA is now configured through an API (instead of PDS)
 * [1250] - [API-SLK] API changes for Secure Link: key renegotiation, session key algorithm selection and session key protection disabling
 * [1323] - [PHY] Updates TX shaping filters for channel 14
-* [1337] - [UMAC] softAP allowed only 3 clients to connect at a time in WPA
+* [1337] - [UMAC] SoftAP allowed only 3 clients to connect at a time in WPA
 * [1309] - [UMAC] Enable TX aggregation
 * [1081] - [UMAC] Enable STA power save in combo mode
 * [1162] - [UMAC-SLK] Implement Secure Link key renegotiation on UMAC

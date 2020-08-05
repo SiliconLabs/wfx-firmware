@@ -6,6 +6,7 @@ Platform Data Set (PDS) API release note
 
 ## New Features/Improvements
 * Added external PA configuration section (only in template and definition files)
+* TEST_IND type defined as unsigned word - min value set to 50 (only in template and definition files)
 
 # Version 4.0
 ## FW compatibility

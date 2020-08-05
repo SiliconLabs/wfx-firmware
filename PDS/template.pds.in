@@ -339,7 +339,7 @@ TEST_FEATURE_CFG: {
     // TEST_MODE selects the activated test feature: enum = 'rx', 'tx_packet', 'tx_cw'
     TEST_MODE: tx_packet,
 
-    // TEST_IND period in ms at which an indication message is sent.
+    // TEST_IND period in ms at which an indication message is sent. Type: unsigned word, min 50
     //       In the case of rx test, it returns the measurement results (PER and RSSI)
     TEST_IND: 1000,
 

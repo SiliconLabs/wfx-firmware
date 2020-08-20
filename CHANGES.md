@@ -1,6 +1,12 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.9.1
+(release date 2020-08-19)
+
+## Bug fixes
+* [1666] - Update the API version advertised in the startup indication
+
 # Release 3.9.0
 (release date 2020-08-04)
 
@@ -14,6 +20,9 @@ WFx Firmware Release Note
 * [1648] - [LMAC] Fix wrong starting sequence number when Ack and BlockAck interleave
 * [1655] - [LMAC] Fix wrong probe response to probe request with hidden SSID
 * [1658] - [LMAC] Fix a connection interoperability issue (AP Cisco WAP150)
+
+## Known issues
+* [1666] - [HIF] Wrong API version advertised in the startup indication
 
 # Release 3.8.0
 (release date 2020-07-09)

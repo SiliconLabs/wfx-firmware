@@ -1,11 +1,21 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.10.0
+(release date 2020-09-07)
+
+## New Features/Improvements
+* [1664] - [UMAC] Open the APIs required to allow the host to perform a WPA3 connection
+
+## Bug fixes
+* [1614] - [UMAC] Fix a firmware crash when the temperature reaches the WF200 operational limit
+* [1663] - [LMAC] Improve the Management Frame Protection associated with the Block Ack mechanism in softAP mode
+
 # Release 3.9.1
 (release date 2020-08-19)
 
 ## Bug fixes
-* [1666] - Update the API version advertised in the startup indication
+* [1666] - [API] Update the API version advertised in the startup indication
 
 # Release 3.9.0
 (release date 2020-08-04)

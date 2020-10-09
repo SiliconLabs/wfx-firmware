@@ -1,6 +1,16 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.11.0
+(release date 2020-10-07)
+
+## New Features/Improvements
+* [1669] - [LMAC] Update the API to allow CCMP/TKIP replay protection from the host
+* [1474] - [LMAC] Implement CCMP/TKIP replay protection when using aggregation
+
+## Bug fixes
+* [1668] - [LMAC] Improve antenna diversity
+
 # Release 3.10.0
 (release date 2020-09-07)
 

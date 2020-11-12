@@ -1,6 +1,17 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.11.1
+(release date 2020-11-10)
+
+## New Features/Improvements
+* [1676] - [LMAC] Shorten aggregation maximum duration
+* [1678] - [UMAC] Improve rate adaptation while using aggregation
+* [1679] - [PTA] Fix background scan timeout while PTA is enabled
+
+## Bug fixes
+* [1689] - [UMAC] Fix WPA3 offloading feature
+
 # Release 3.11.0
 (release date 2020-10-07)
 

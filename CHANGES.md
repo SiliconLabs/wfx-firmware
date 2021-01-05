@@ -1,6 +1,20 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.12.0
+(release date 2021-01-04)
+
+## New Features/Improvements
+* [1486] - [LMAC] Limit aggregation packet retries according to the negotiated capacity
+* [1697] - [UMAC] Increase the default packet retry attempt number
+* [1700] - [LMAC] Optimize Fast-PS behavior when receiving multicast packets
+* [1702] - [UMAC] Add an API to disable U-APSD power save mode
+* [1703] - [UMAC] Add a power save error indication to notify the host of a mode changed
+
+## Bug fixes
+* [1701] - [LMAC] Fix keep-alive mechanism to allow de-authentication packet reception
+* [1707] - [LMAC] Fix reordering buffer mechanism used in aggregation
+
 # Release 3.11.1
 (release date 2020-11-10)
 

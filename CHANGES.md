@@ -1,6 +1,14 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.12.2
+(release date 2021-03-22)
+
+## Bug fixes
+* [1731] - [LMAC] Fix an issue in concurrent mode where packets were passed to the wrong interface
+* [1745] - [LMAC] Fix an issue with specific information elements handling leading to a firmware exception
+* [1751] - [UMAC] Configured CCA mode is not overwritten anymore when starting an interface
+
 # Release 3.12.1
 (release date 2021-02-18)
 

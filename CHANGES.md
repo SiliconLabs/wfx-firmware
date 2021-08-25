@@ -1,6 +1,16 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.12.3
+(release date 2021-08-23)
+
+## Bug fixes
+* [1757] - [UMAC] Handle invalid size parameters in sl_wfx_send_scan_command()
+* [1767] - [LMAC] Prevent defragmentation from accepting mixed encrypted/plaintext fragments
+* [1768] - [LMAC] Prevent defragmentation from accepting non-consecutive packet numbers for fragments
+* [1769] - [LMAC] Prevent defragmentation from accepting fragments encrypted with different keys
+* [1770] - [LMAC] Clear defragmentation cache upon reconnection
+
 # Release 3.12.2
 (release date 2021-03-22)
 

@@ -1,6 +1,12 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.13.0
+(release date 2021-10-21)
+
+## New Features/Improvements
+* [1724] - [UMAC] Add an API to select the rate algorithm to use
+
 # Release 3.12.3
 (release date 2021-08-23)
 
@@ -26,7 +32,7 @@ WFx Firmware Release Note
 * [1725] - [UMAC] Wi-Fi power mode API with 'listen_interval = 0' is taken into account
 
 ## Bug fixes
-* [1710] - [UMACs] Increase WPA3 connection authentication timeout
+* [1710] - [UMAC] Increase WPA3 connection authentication timeout
 * [1712] - [LMAC] Avoid beacon collision in concurrent mode
 * [1726] - [LMAC] Fix 'incoherent status and result_flags' warning
 * [1730] - [UMAC] Fix incorrect packet abort leading to assert

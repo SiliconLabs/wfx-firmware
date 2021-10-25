@@ -50,6 +50,7 @@ The PDS generation flow is:
 
 ### Compressing PDS files
 
+The `pds_compress` tool can be found in the [WFX Linux tools repository][LINUX_TOOL].
 Use `pds_compress [options] INPUT [OUTPUT]` to compress a `.pds.in` file to a `.pds` file,
  ready to be sent to the WFX firmware.
 
@@ -65,3 +66,4 @@ _Resulting `.pds` files should not be edited. It is recommended to always start 
 [FW_REPO]: https://github.com/SiliconLabs/wfx-firmware
 [PDS_DOC]: https://github.com/SiliconLabs/wfx-pds/blob/master/README.md
 [PDS_REPO]: https://github.com/SiliconLabs/wfx-pds
+[LINUX_TOOL]: https://github.com/SiliconLabs/wfx-linux-tools

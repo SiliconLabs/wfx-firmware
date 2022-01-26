@@ -1,6 +1,13 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.14.0
+(release date 2022-01-26)
+
+## New Features/Improvements
+* [1792] - [UMAC] Fix an issue causing the softAP mode to forward unencrypted data frames
+* [1794] - [UMAC] Fix a connection timeout while connecting to an AP with a hidden SSID
+
 # Release 3.13.0
 (release date 2021-10-21)
 

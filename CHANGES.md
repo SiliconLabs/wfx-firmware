@@ -1,6 +1,12 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.15.0
+(release date 2022-04-29)
+
+## New Features/Improvements
+* [1800] - [UMAC] Add an API to forward probe request when running in AP mode
+
 # Release 3.14.0
 (release date 2022-01-26)
 

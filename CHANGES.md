@@ -1,6 +1,18 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.16.0
+(release date 2022-09-05)
+
+## New Features/Improvements
+* [1820] - [UMAC] Added a new API to obtain Wi-Fi diagnostics information
+* [1825] - [UMAC] The TX rate mask can be applied in AP mode
+
+## Bug fixes
+* [1670] - [LMAC] Fixed support for WDS 4 address frames
+* [1813] - [LMAC] Fixed an error that was causing the scan complete indication to be blocked
+* [1822] - [UMAC] Fixed an error that was causing access point packets to be encrypted multiple times
+
 # Release 3.15.0
 (release date 2022-04-29)
 

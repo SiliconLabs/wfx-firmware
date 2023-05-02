@@ -1,6 +1,12 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.16.1
+(release date 2023-05-02)
+
+## Bug fixes
+* [1832] - Fixed an issue blocking connection to specific Asus routers using the UMAC API
+
 # Release 3.16.0
 (release date 2022-09-05)
 

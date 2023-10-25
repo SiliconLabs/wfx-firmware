@@ -1,6 +1,17 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.17.0
+(release date 2023-10-25)
+
+## New Features/Improvements
+* [1839] - [UMAC] Update the WPA supplicant to support the latest WPA3 implementation
+
+## Bug fixes
+* [1842] - [LMAC] Fixed an issue not sending RTS/CTS-to-self on A-MPDU retries
+* [1845] - [LMAC] Fixed an issue setting the Retry bit when only the RTS was retried
+* [1844] - [UMAC] Fixed an issue where the firmware is staying active using the U-APSD power mode
+
 # Release 3.16.1
 (release date 2023-05-02)
 

@@ -1,6 +1,19 @@
 WFx Firmware Release Note
 =========================
 
+# Release 3.18.0
+(release date 2026-10-07)
+
+## New Features/Improvements
+* [1864] - [LMAC] Added a new API to allow an A-MPDU w/ a single MPDU
+
+## Bug fixes
+* [1854] - [LMAC] Fixed an error that was preventing the device from sleeping after a power-save mode change
+* [1857] - [LMAC] Fixed unstable MCS7 uplink TCP throughput
+* [1859] - [LMAC] Fixed absolute CCA threshold computation with non-default RX front-end loss
+* [1860] - [LMAC] Fixed Tx power level restriction to 20 dBm when using an external FEM
+* [1867] - [LMAC] Fixed a firmware exception caused by a malformed beacon
+
 # Release 3.17.0
 (release date 2023-10-25)
 
